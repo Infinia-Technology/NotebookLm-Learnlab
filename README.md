@@ -21,7 +21,7 @@ A production-ready fullstack platform template with authentication, user managem
 ## Creating a new app
 
 ```bash
-./init-project.py
+./init-project.sh
 docker compose up --build
 ```
 
@@ -43,7 +43,7 @@ After initialization:
 ### 1. Initialize the Project
 
 ```bash
-./init-project.py
+./init-project.sh
 ```
 
 Follow the interactive prompts to configure your app.
@@ -132,7 +132,7 @@ npm run dev  # Runs at http://localhost:5173
 ├── .env.example
 ├── .cursorrules           # AI coding rules
 ├── ai-guidelines.md       # Development guide
-└── init-project.py        # Project setup script
+└── init-project.sh        # Project setup script
 ```
 
 ## Environment Variables

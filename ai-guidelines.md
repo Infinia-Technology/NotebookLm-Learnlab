@@ -155,7 +155,7 @@ After running `init-project.py`, Docker services are named:
 - `<slug>-redis`
 
 ### Initialization
-Run `./init-project.py` to:
+Run `./init-project.sh` to:
 1. Set app name, slug, and description
 2. Choose primary color
 3. Generate `.env` with secure secrets

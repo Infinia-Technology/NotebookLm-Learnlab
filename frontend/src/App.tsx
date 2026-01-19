@@ -8,6 +8,7 @@ import { AdminLayout } from './components/layout/AdminLayout';
 import { RoleGuard } from './components/auth/RoleGuard';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LandingPage } from './pages/LandingPage';
+import { DesignSystemGuide } from './pages/DesignSystemGuide';
 import { NotFound } from './pages/NotFound';
 import {
   LoginPage,
@@ -38,6 +39,9 @@ function AppRoutes() {
     <Routes>
       {/* Public landing page */}
       <Route path="/" element={<LandingPage />} />
+
+      {/* Design System Guide - public for development reference */}
+      <Route path="/design-system" element={<DesignSystemGuide />} />
 
       {/* Redirect /login to landing page */}
       <Route path="/login" element={<Navigate to="/" replace />} />
