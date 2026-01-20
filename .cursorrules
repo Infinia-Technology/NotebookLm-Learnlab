@@ -20,12 +20,15 @@ Rules:
 Design System Rules:
 - Always use design system components from frontend/src/components/ui/.
 - Never write raw HTML <input> or <button> elements outside ui components.
-- Use the Button component for all buttons.
+- Use the Button component for all buttons with proper variants (primary, secondary, outline, ghost, danger).
+- Use LinkButton for router links that should look like buttons (<LinkButton to="/path" variant="primary">).
+- Never use inline button styling like bg-sky-600 or bg-indigo-600 - use Button component instead.
 - Use the Input component for all text inputs.
 - Use the Card component for content containers.
 - Landing pages must use design-system components.
 - Tailwind tokens come from design-system/design-tokens.css.
 - Never define colors inline. Use CSS variables like var(--btn-primary-bg).
+- Primary color is sky blue (--color-primary-600). Do not use other colors for primary actions.
 
 App Personalization:
     - system.config.json is the source of truth for app name, description, theme color, slug, and layout.

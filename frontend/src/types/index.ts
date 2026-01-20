@@ -79,23 +79,6 @@ export interface TokenResponse {
   user: UserResponse;
 }
 
-// Domain types
-export interface Domain {
-  uuid: string;
-  domain: string;
-  name: string;
-  parent_domain_uuid?: string;
-  hierarchy_path?: string[];
-  is_active: boolean;
-  created_at?: string;
-  updated_at?: string;
-}
-
-export interface DomainListResponse {
-  domains: Domain[];
-  total: number;
-}
-
 // Admin stats
 export interface AdminStats {
   total_users: number;

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Settings, Users, Globe, TrendingUp, Activity, Calendar } from 'lucide-react';
+import { Settings, Users, TrendingUp, Activity, Calendar } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useSystemConfig } from '../hooks/useSystemConfig';
 import { Card, CardHeader } from '../components/ui/Card';
@@ -27,14 +27,7 @@ const quickActions: QuickAction[] = [
     href: '/admin/users',
     icon: Users,
     adminOnly: true,
-  },
-  {
-    name: 'Domains',
-    description: 'Manage multi-tenant domains',
-    href: '/admin/domains',
-    icon: Globe,
-    adminOnly: true,
-  },
+  }
 ];
 
 // Mock stats for demonstration
@@ -69,7 +62,7 @@ const stats = [
   },
 ];
 
-export default function DashboardV2() {
+export default function Dashboard() {
   const { user, isSuperAdmin } = useAuth();
   const { config } = useSystemConfig();
 

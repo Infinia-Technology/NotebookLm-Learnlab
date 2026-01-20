@@ -10,8 +10,6 @@ import type {
   CreateUserRequest,
   UpdateUserRequest,
   TokenResponse,
-  Domain,
-  DomainListResponse,
   AdminStats,
 } from '../types';
 
@@ -179,39 +177,6 @@ export const updateUser = async (userId: string, updates: UpdateUserRequest): Pr
 
 export const deleteUser = async (userId: string): Promise<void> => {
   await api.delete(`/admin/users/${userId}`);
-};
-
-// ===================== Domains =====================
-
-export const listDomains = async (): Promise<DomainListResponse> => {
-  const { data } = await api.get('/domains/');
-  return data;
-};
-
-export const getDomain = async (domainUuid: string): Promise<Domain> => {
-  const { data } = await api.get(`/domains/${domainUuid}`);
-  return data;
-};
-
-export const createDomain = async (domainData: {
-  domain: string;
-  name: string;
-  parent_domain_uuid?: string;
-}): Promise<Domain> => {
-  const { data } = await api.post('/domains/', domainData);
-  return data;
-};
-
-export const updateDomain = async (
-  domainUuid: string,
-  updates: { name?: string; is_active?: boolean }
-): Promise<Domain> => {
-  const { data } = await api.put(`/domains/${domainUuid}`, updates);
-  return data;
-};
-
-export const deleteDomain = async (domainUuid: string): Promise<void> => {
-  await api.delete(`/domains/${domainUuid}`);
 };
 
 export default api;

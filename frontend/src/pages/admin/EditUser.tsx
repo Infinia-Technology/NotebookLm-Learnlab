@@ -19,6 +19,7 @@ import {
   getUser,
   updateUser,
 } from '../../lib/api';
+import { Button } from '../../components/ui/Button';
 import type { UpdateUserRequest } from '../../types';
 
 export function EditUserPage() {
@@ -101,7 +102,7 @@ export function EditUserPage() {
   if (userLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-sky-600 animate-spin" />
       </div>
     );
   }
@@ -126,8 +127,8 @@ export function EditUserPage() {
           <ArrowLeft className="w-5 h-5 text-gray-600" />
         </button>
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-            <UserCog className="w-6 h-6 text-indigo-600" />
+          <div className="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
+            <UserCog className="w-6 h-6 text-sky-600" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Edit User</h1>
@@ -286,25 +287,23 @@ export function EditUserPage() {
 
         {/* Submit */}
         <div className="flex items-center justify-end gap-3">
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="lg"
             onClick={() => navigate('/admin/users')}
-            className="px-6 py-2.5 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
-            disabled={updateMutation.isPending}
-            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+            variant="primary"
+            size="lg"
+            loading={updateMutation.isPending}
+            leftIcon={!updateMutation.isPending ? <Save className="w-4 h-4" /> : undefined}
           >
-            {updateMutation.isPending ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
             Save Changes
-          </button>
+          </Button>
         </div>
       </form>
     </div>

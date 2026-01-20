@@ -7,6 +7,7 @@
  * - Main content area
  * - Footer
  *
+ * Supports both user and admin variants with different accent colors.
  * Sidebar collapsed state is persisted to localStorage.
  */
 
@@ -18,7 +19,11 @@ import { useSystemConfig } from '../../hooks/useSystemConfig';
 
 const SIDEBAR_COLLAPSED_KEY = 'sidebar-collapsed';
 
-export function AppShell() {
+export interface AppShellProps {
+  variant?: 'user' | 'admin';
+}
+
+export function AppShell({ variant = 'user' }: AppShellProps) {
   const { config, loading } = useSystemConfig();
 
   // Initialize from localStorage or system config default
@@ -51,15 +56,16 @@ export function AppShell() {
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+        variant={variant}
       />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Header with breadcrumbs and profile */}
-        <HeaderBar />
+        <HeaderBar variant={variant} />
 
         {/* Main content area */}
-        <main className="flex-1 overflow-auto bg-gradient-to-br from-gray-50 to-gray-100/50">
+        <main className="flex-1 overflow-auto bg-gray-50">
           <div className="p-6 max-w-[1600px] mx-auto w-full">
             <Outlet />
           </div>

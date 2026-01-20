@@ -2,20 +2,18 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Users,
-  Globe,
-  Settings,
   ShieldCheck,
   ArrowRight,
   Loader2,
+  UserPlus,
 } from 'lucide-react';
-import { getAdminStats, listDomains } from '../../lib/api';
+import { getAdminStats } from '../../lib/api';
 
 interface DashboardStats {
   totalUsers: number;
   activeUsers: number;
   pendingUsers: number;
   superAdmins: number;
-  totalDomains: number;
   isLoading: boolean;
 }
 
@@ -25,24 +23,19 @@ export default function DashboardAdmin() {
     activeUsers: 0,
     pendingUsers: 0,
     superAdmins: 0,
-    totalDomains: 0,
     isLoading: true,
   });
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [userStats, domainsResponse] = await Promise.all([
-          getAdminStats(),
-          listDomains(),
-        ]);
+        const userStats = await getAdminStats();
 
         setStats({
           totalUsers: userStats.total_users || 0,
           activeUsers: userStats.active_users || 0,
           pendingUsers: userStats.pending_users || 0,
           superAdmins: userStats.super_admins || 0,
-          totalDomains: domainsResponse.total || 0,
           isLoading: false,
         });
       } catch (error) {
@@ -86,36 +79,29 @@ export default function DashboardAdmin() {
           isLoading={stats.isLoading}
         />
         <StatCard
-          title="Domains"
-          value={stats.totalDomains}
-          icon={Globe}
+          title="Super Admins"
+          value={stats.superAdmins}
+          icon={ShieldCheck}
           color="purple"
           isLoading={stats.isLoading}
         />
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <QuickActionCard
           title="User Management"
           description="View and manage all users"
           icon={Users}
           href="/admin/users"
-          color="indigo"
+          color="sky"
         />
         <QuickActionCard
-          title="Domain Management"
-          description="Configure multi-tenant domains"
-          icon={Globe}
-          href="/admin/domains"
+          title="Create User"
+          description="Add a new user to the system"
+          icon={UserPlus}
+          href="/admin/users/create"
           color="emerald"
-        />
-        <QuickActionCard
-          title="System Settings"
-          description="Configure system settings"
-          icon={Settings}
-          href="/dashboard/account"
-          color="gray"
         />
       </div>
     </div>
@@ -172,12 +158,11 @@ function QuickActionCard({
   description: string;
   icon: React.ElementType;
   href: string;
-  color: 'indigo' | 'emerald' | 'gray';
+  color: 'sky' | 'emerald';
 }) {
   const colorClasses = {
-    indigo: 'bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200',
+    sky: 'bg-sky-100 text-sky-600 group-hover:bg-sky-200',
     emerald: 'bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200',
-    gray: 'bg-gray-100 text-gray-600 group-hover:bg-gray-200',
   };
 
   return (

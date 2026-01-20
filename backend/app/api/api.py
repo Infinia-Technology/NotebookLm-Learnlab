@@ -12,7 +12,6 @@ from app.modules import (
     health_router,
     auth_router,
     admin_router,
-    domains_router,
     account_router,
 )
 
@@ -49,14 +48,5 @@ api_router.include_router(
     account_router,
     prefix="/account",
     tags=["account"],
-    dependencies=auth_required
-)
-
-# Domains - Multi-tenant domain management (super_admin only)
-# Note: Role check is done at endpoint level via require_role
-api_router.include_router(
-    domains_router,
-    prefix="/domains",
-    tags=["domains"],
     dependencies=auth_required
 )

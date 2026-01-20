@@ -14,7 +14,6 @@ from app.api.api import api_router
 from app.db import connect_to_mongo, close_mongo_connection, get_database
 from app.odm.document import Document
 from app.odm.user import UserDocument, GroupDocument, AuditLogDocument
-from app.odm.domain import DomainDocument
 
 
 def init_document_classes(db):
@@ -23,7 +22,6 @@ def init_document_classes(db):
     UserDocument.set_db(db)
     GroupDocument.set_db(db)
     AuditLogDocument.set_db(db)
-    DomainDocument.set_db(db)
 
 
 @asynccontextmanager
@@ -56,6 +54,9 @@ app = FastAPI(
     description="SAIL Starter Kit API with MongoDB Backend",
     version="1.0.0",
     lifespan=lifespan,
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json",
 )
 
 # CORS middleware

@@ -21,6 +21,7 @@ import {
 } from '../../lib/api';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../contexts/AuthContext';
+import { LinkButton } from '../../components/ui/Button';
 import type { User } from '../../types';
 
 const ITEMS_PER_PAGE = 20;
@@ -108,21 +109,21 @@ export function UsersPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-            <UsersIcon className="w-6 h-6 text-indigo-600" />
+          <div className="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
+            <UsersIcon className="w-6 h-6 text-sky-600" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
             <p className="text-gray-500">Manage users and their permissions</p>
           </div>
         </div>
-        <Link
+        <LinkButton
           to="/admin/users/create"
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          variant="primary"
+          leftIcon={<UserPlus className="w-4 h-4" />}
         >
-          <UserPlus className="w-4 h-4" />
           Create User
-        </Link>
+        </LinkButton>
       </div>
 
       {/* Stats Cards */}
@@ -222,7 +223,7 @@ export function UsersPage() {
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
+            <Loader2 className="w-8 h-8 text-sky-600 animate-spin" />
           </div>
         ) : users.length === 0 ? (
           <div className="text-center py-20">

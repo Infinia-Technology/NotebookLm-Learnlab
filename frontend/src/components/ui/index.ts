@@ -1,6 +1,6 @@
 // Form Components
-export { Button } from './Button';
-export type { ButtonProps } from './Button';
+export { Button, LinkButton, buttonVariants, buttonSizes, buttonBase } from './Button';
+export type { ButtonProps, LinkButtonProps } from './Button';
 
 export { Input } from './Input';
 export type { InputProps } from './Input';

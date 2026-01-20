@@ -22,6 +22,7 @@ import {
   changePassword,
 } from '../lib/api';
 import { validatePassword } from '../lib/validation';
+import { Button } from '../components/ui/Button';
 
 type TabType = 'profile' | 'security';
 
@@ -60,7 +61,7 @@ export function AccountSettings() {
                 className={`
                   flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap
                   ${isActive
-                    ? 'border-indigo-500 text-indigo-600'
+                    ? 'border-indigo-500 text-sky-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }
                 `}
@@ -183,29 +184,30 @@ function ProfileTab() {
             Personal Information
           </h2>
           {!isEditing ? (
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setIsEditing(true)}
-              className="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors"
+              className="text-primary-600"
             >
               Edit Profile
-            </button>
+            </Button>
           ) : (
             <div className="flex gap-2">
-              <button
+              <Button
+                variant="ghost"
                 onClick={handleCancel}
-                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2"
+                leftIcon={<X className="w-4 h-4" />}
               >
-                <X className="w-4 h-4" />
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
                 onClick={handleSave}
-                disabled={updateMutation.isPending}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
+                loading={updateMutation.isPending}
+                leftIcon={!updateMutation.isPending ? <Save className="w-4 h-4" /> : undefined}
               >
-                <Save className="w-4 h-4" />
                 {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -467,13 +469,15 @@ function SecurityTab() {
             </div>
           </div>
 
-          <button
+          <Button
             type="submit"
-            disabled={changeMutation.isPending || !passwordValidation.isValid || !confirmPassword || newPassword !== confirmPassword}
-            className="w-full px-4 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="primary"
+            disabled={!passwordValidation.isValid || !confirmPassword || newPassword !== confirmPassword}
+            loading={changeMutation.isPending}
+            className="w-full"
           >
             {changeMutation.isPending ? 'Changing Password...' : 'Change Password'}
-          </button>
+          </Button>
         </form>
       </div>
 

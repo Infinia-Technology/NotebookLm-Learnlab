@@ -11,11 +11,11 @@ import {
   Briefcase,
   Shield,
   X,
-  Loader2,
   AlertCircle,
   Check,
 } from 'lucide-react';
 import { createUser } from '../../lib/api';
+import { Button } from '../../components/ui/Button';
 import type { CreateUserRequest } from '../../types';
 
 export function CreateUserPage() {
@@ -90,8 +90,8 @@ export function CreateUserPage() {
           <ArrowLeft className="w-5 h-5 text-gray-600" />
         </button>
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-            <UserPlus className="w-6 h-6 text-indigo-600" />
+          <div className="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
+            <UserPlus className="w-6 h-6 text-sky-600" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Create User</h1>
@@ -245,25 +245,23 @@ export function CreateUserPage() {
 
         {/* Submit */}
         <div className="flex items-center justify-end gap-3">
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="lg"
             onClick={() => navigate('/admin/users')}
-            className="px-6 py-2.5 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
-            disabled={createMutation.isPending}
-            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+            variant="primary"
+            size="lg"
+            loading={createMutation.isPending}
+            leftIcon={!createMutation.isPending ? <Check className="w-4 h-4" /> : undefined}
           >
-            {createMutation.isPending ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Check className="w-4 h-4" />
-            )}
             Create User
-          </button>
+          </Button>
         </div>
       </form>
     </div>

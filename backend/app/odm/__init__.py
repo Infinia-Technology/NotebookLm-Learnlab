@@ -7,7 +7,6 @@ Directory Structure:
 - document.py: Document base class and PyObjectId
 - base.py: Extended base with file storage enums
 - user.py: User, Group, AuditLog documents
-- domain.py: Domain document for multi-tenancy
 """
 
 # Base classes from document.py
@@ -30,14 +29,10 @@ from app.odm.user import (
     EmbeddedGroupAssignment,
 )
 
-# Domain model for multi-tenancy
-from app.odm.domain import DomainDocument
-
 # Backward-compatible aliases
 User = UserDocument
 Group = GroupDocument
 AuditLog = AuditLogDocument
-Domain = DomainDocument
 
 __all__ = [
     # Base
@@ -51,10 +46,6 @@ __all__ = [
     "Group",
     "AuditLogDocument",
     "AuditLog",
-
-    # Domain
-    "DomainDocument",
-    "Domain",
 
     # Role types
     "SystemRoleStr",

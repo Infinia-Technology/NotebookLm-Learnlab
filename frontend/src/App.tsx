@@ -4,7 +4,6 @@ import { AuthProvider, ProtectedRoute, PublicRoute } from './core';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AppShell } from './components/layout/AppShell';
 import { AuthLayout } from './components/layout/AuthLayout';
-import { AdminLayout } from './components/layout/AdminLayout';
 import { RoleGuard } from './components/auth/RoleGuard';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { DocumentTitle } from './components/DocumentTitle';
@@ -21,9 +20,8 @@ import {
 import { UsersPage } from './pages/admin/Users';
 import { CreateUserPage } from './pages/admin/CreateUser';
 import { EditUserPage } from './pages/admin/EditUser';
-import { DomainsPage } from './pages/admin/Domains';
 import DashboardAdmin from './pages/admin/DashboardAdmin';
-import DashboardV2 from './pages/DashboardV2';
+import Dashboard from './pages/Dashboard';
 import AccountSettings from './pages/AccountSettings';
 
 const queryClient = new QueryClient({
@@ -66,20 +64,20 @@ function AppRoutes() {
       <Route
         element={
           <ProtectedRoute>
-            <AppShell />
+            <AppShell variant="user" />
           </ProtectedRoute>
         }
       >
-        <Route path="/dashboard" element={<DashboardV2 />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/account" element={<AccountSettings />} />
       </Route>
 
-      {/* Admin routes with AdminLayout - super_admin only */}
+      {/* Admin routes with AppShell (admin variant) - super_admin only */}
       <Route
         element={
           <ProtectedRoute>
             <RoleGuard requireSuperAdmin redirectOnFail>
-              <AdminLayout />
+              <AppShell variant="admin" />
             </RoleGuard>
           </ProtectedRoute>
         }
@@ -88,7 +86,6 @@ function AppRoutes() {
         <Route path="/admin/users" element={<UsersPage />} />
         <Route path="/admin/users/create" element={<CreateUserPage />} />
         <Route path="/admin/users/:userId" element={<EditUserPage />} />
-        <Route path="/admin/domains" element={<DomainsPage />} />
       </Route>
 
       {/* 404 Not Found - Catch all unmatched routes */}

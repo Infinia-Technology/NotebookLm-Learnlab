@@ -2,9 +2,9 @@
  * HeaderBar - Top navigation bar with breadcrumbs and user menu
  *
  * Features:
- * - Dynamic breadcrumbs based on current route
+ * - Dynamic breadcrumbs based on current route and variant
  * - User profile dropdown
- * - Admin link for super_admin users
+ * - View switcher (Admin/User) for super_admin users
  */
 
 import { useState, useRef, useEffect } from 'react';
@@ -16,10 +16,15 @@ import {
   LogOut,
   ChevronDown,
   ShieldCheck,
+  ArrowLeftRight,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/Button';
+
+export interface HeaderBarProps {
+  variant?: 'user' | 'admin';
+}
 
 // Breadcrumb configuration
 interface BreadcrumbItem {
@@ -27,8 +32,8 @@ interface BreadcrumbItem {
   href?: string;
 }
 
-// Route to breadcrumb mapping
-const routeBreadcrumbs: Record<string, BreadcrumbItem[]> = {
+// User route breadcrumbs
+const userRouteBreadcrumbs: Record<string, BreadcrumbItem[]> = {
   '/dashboard': [{ label: 'Dashboard' }],
   '/dashboard/account': [
     { label: 'Dashboard', href: '/dashboard' },
@@ -36,28 +41,61 @@ const routeBreadcrumbs: Record<string, BreadcrumbItem[]> = {
   ],
 };
 
+// Admin route breadcrumbs
+const adminRouteBreadcrumbs: Record<string, BreadcrumbItem[]> = {
+  '/admin': [{ label: 'Admin Dashboard' }],
+  '/admin/users': [
+    { label: 'Admin', href: '/admin' },
+    { label: 'User Management' },
+  ],
+  '/admin/users/create': [
+    { label: 'Admin', href: '/admin' },
+    { label: 'Users', href: '/admin/users' },
+    { label: 'Create' },
+  ],
+};
+
 // Dynamic route patterns
-const dynamicBreadcrumbs: Array<{
+const userDynamicBreadcrumbs: Array<{
   pattern: RegExp;
   getBreadcrumbs: (match: RegExpMatchArray) => BreadcrumbItem[];
 }> = [
-    {
-      pattern: /^\/dashboard\/([^/]+)$/,
-      getBreadcrumbs: (match) => [
-        { label: 'Dashboard', href: '/dashboard' },
-        { label: match[1].charAt(0).toUpperCase() + match[1].slice(1).replace(/-/g, ' ') },
-      ],
-    },
-  ];
+  {
+    pattern: /^\/dashboard\/([^/]+)$/,
+    getBreadcrumbs: (match) => [
+      { label: 'Dashboard', href: '/dashboard' },
+      { label: match[1].charAt(0).toUpperCase() + match[1].slice(1).replace(/-/g, ' ') },
+    ],
+  },
+];
 
-function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
+const adminDynamicBreadcrumbs: Array<{
+  pattern: RegExp;
+  getBreadcrumbs: (match: RegExpMatchArray) => BreadcrumbItem[];
+}> = [
+  {
+    pattern: /^\/admin\/users\/([^/]+)$/,
+    getBreadcrumbs: () => [
+      { label: 'Admin', href: '/admin' },
+      { label: 'Users', href: '/admin/users' },
+      { label: 'Edit User' },
+    ],
+  },
+];
+
+function getBreadcrumbs(pathname: string, variant: 'user' | 'admin'): BreadcrumbItem[] {
+  const staticRoutes = variant === 'admin' ? adminRouteBreadcrumbs : userRouteBreadcrumbs;
+  const dynamicRoutes = variant === 'admin' ? adminDynamicBreadcrumbs : userDynamicBreadcrumbs;
+  const defaultLabel = variant === 'admin' ? 'Admin' : 'Dashboard';
+  const defaultHref = variant === 'admin' ? '/admin' : '/dashboard';
+
   // Check static routes first
-  if (routeBreadcrumbs[pathname]) {
-    return routeBreadcrumbs[pathname];
+  if (staticRoutes[pathname]) {
+    return staticRoutes[pathname];
   }
 
   // Check dynamic patterns
-  for (const { pattern, getBreadcrumbs: getItems } of dynamicBreadcrumbs) {
+  for (const { pattern, getBreadcrumbs: getItems } of dynamicRoutes) {
     const match = pathname.match(pattern);
     if (match) {
       return getItems(match);
@@ -65,17 +103,19 @@ function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
   }
 
   // Default fallback
-  return [{ label: 'Dashboard', href: '/dashboard' }];
+  return [{ label: defaultLabel, href: defaultHref }];
 }
 
-export function HeaderBar() {
+export function HeaderBar({ variant = 'user' }: HeaderBarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout, isSuperAdmin } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const breadcrumbs = getBreadcrumbs(location.pathname);
+  const isAdmin = variant === 'admin';
+  const breadcrumbs = getBreadcrumbs(location.pathname, variant);
+  const homeHref = isAdmin ? '/admin' : '/dashboard';
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -101,14 +141,24 @@ export function HeaderBar() {
     ? `${user.first_name.charAt(0)}${user.last_name?.charAt(0) || ''}`
     : user?.email?.charAt(0).toUpperCase() || 'U';
 
+  // Avatar colors based on variant
+  const avatarColors = isAdmin
+    ? 'from-purple-500 to-purple-700'
+    : 'from-[var(--btn-primary-bg)] to-sky-400';
+
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="flex items-center justify-between h-14 px-6">
         {/* Breadcrumbs */}
         <nav className="flex items-center space-x-1 text-sm">
           <Link
-            to="/dashboard"
-            className="text-gray-400 hover:text-[var(--btn-primary-bg)] transition-colors p-1 rounded-md hover:bg-gray-50"
+            to={homeHref}
+            className={cn(
+              'transition-colors p-1 rounded-md hover:bg-gray-50',
+              isAdmin
+                ? 'text-purple-500 hover:text-purple-700'
+                : 'text-gray-400 hover:text-[var(--btn-primary-bg)]'
+            )}
           >
             <Home className="w-4 h-4" />
           </Link>
@@ -118,7 +168,7 @@ export function HeaderBar() {
               {crumb.href && index < breadcrumbs.length - 1 ? (
                 <Link
                   to={crumb.href}
-                  className="text-gray-500 hover:text-[var(--btn-primary-bg)] transition-colors px-1.5 py-0.5 rounded-md hover:bg-gray-50"
+                  className="text-gray-500 hover:text-gray-700 transition-colors px-1.5 py-0.5 rounded-md hover:bg-gray-50"
                 >
                   {crumb.label}
                 </Link>
@@ -129,17 +179,27 @@ export function HeaderBar() {
           ))}
         </nav>
 
-        {/* Right side: Admin Switch + Profile */}
+        {/* Right side: View Switcher + Profile */}
         <div className="flex items-center gap-2">
-          {/* Admin View Switcher - Only for super_admin */}
+          {/* View Switcher - Only for super_admin */}
           {isSuperAdmin && (
-            <Link
-              to="/admin"
-              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg transition-all duration-200"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              <span className="hidden sm:inline">Admin</span>
-            </Link>
+            isAdmin ? (
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+              >
+                <ArrowLeftRight className="w-4 h-4" />
+                <span className="hidden sm:inline">User View</span>
+              </Link>
+            ) : (
+              <Link
+                to="/admin"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg transition-all duration-200"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                <span className="hidden sm:inline">Admin</span>
+              </Link>
+            )
           )}
 
           {/* Profile Dropdown */}
@@ -153,7 +213,10 @@ export function HeaderBar() {
                 dropdownOpen ? 'bg-gray-100' : 'hover:bg-gray-50'
               )}
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--btn-primary-bg)] to-sky-400 flex items-center justify-center ring-2 ring-white shadow-sm">
+              <div className={cn(
+                'w-8 h-8 rounded-full flex items-center justify-center ring-2 ring-white shadow-sm bg-gradient-to-br',
+                avatarColors
+              )}>
                 <span className="text-white text-xs font-semibold">{initials}</span>
               </div>
               <span className="text-sm font-medium text-gray-700 hidden sm:block max-w-[120px] truncate">
@@ -175,7 +238,12 @@ export function HeaderBar() {
                   <p className="text-sm font-semibold text-gray-900">{displayName}</p>
                   <p className="text-xs text-gray-500 truncate mt-0.5">{user?.email}</p>
                   {user?.role && (
-                    <span className="inline-flex items-center mt-2 px-2 py-0.5 text-xs font-medium bg-sky-50 text-sky-700 rounded-full capitalize">
+                    <span className={cn(
+                      'inline-flex items-center mt-2 px-2 py-0.5 text-xs font-medium rounded-full capitalize',
+                      isAdmin
+                        ? 'bg-purple-100 text-purple-700'
+                        : 'bg-sky-50 text-sky-700'
+                    )}>
                       {user.role.replace('_', ' ')}
                     </span>
                   )}

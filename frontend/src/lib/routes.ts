@@ -35,7 +35,6 @@ export const routes = {
     users: () => `${ADMIN_BASE}/users`,
     createUser: () => `${ADMIN_BASE}/users/create`,
     editUser: (userId: string) => `${ADMIN_BASE}/users/${userId}`,
-    domains: () => `${ADMIN_BASE}/domains`,
   },
 } as const;
 
