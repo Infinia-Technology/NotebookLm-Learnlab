@@ -124,14 +124,10 @@ print_banner() {
 main() {
     cd "$SCRIPT_DIR"
 
-    # Check if already initialized
-    if [[ -f "system.config.json" ]]; then
-        print_warning "Project already initialized (system.config.json exists)"
-        read -p "Do you want to re-initialize? This will overwrite existing config [y/N]: " reinit
-        if [[ "$reinit" != "y" && "$reinit" != "Y" ]]; then
-            echo "Aborted."
-            exit 0
-        fi
+    # Check if already initialized (check for .env since system.config.json is in repo)
+    if [[ -f ".env" ]]; then
+        print_warning "Project was previously initialized. Re-running will update configuration."
+        echo ""
     fi
 
     print_banner
@@ -255,8 +251,11 @@ EOF
 
     # Create .env from .env.example
     if [[ -f ".env" ]]; then
-        print_warning ".env file already exists, skipping..."
-    elif [[ -f ".env.example" ]]; then
+        print_warning ".env file already exists, backing up to .env.backup"
+        cp .env .env.backup
+    fi
+
+    if [[ -f ".env.example" ]]; then
         cp .env.example .env
 
         # Update .env values
