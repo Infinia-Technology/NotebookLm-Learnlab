@@ -1,0 +1,126 @@
+# SAIL Starter Kit - Cline Rules
+
+## Overview
+
+AI-Enabled Fullstack Platform with:
+- FastAPI + Pydantic + MongoDB backend
+- React + TypeScript + TailwindCSS frontend
+- JWT authentication with RBAC
+- App generation system
+
+## Critical Constraints
+
+### NEVER DO
+1. Add new frameworks/libraries without explicit approval
+2. Modify docker-compose.yml without asking
+3. Bypass authentication or RBAC checks
+4. Write inline CSS (use Tailwind)
+5. Use raw HTML form elements (use design system)
+6. Hardcode color values (use CSS variables)
+7. Create files manually in modules/ or generated/
+
+### ALWAYS DO
+1. Use design system components from `components/ui/`
+2. Use async/await for all database operations
+3. Add type hints to Python functions
+4. Define TypeScript interfaces for props
+5. Validate inputs on frontend AND backend
+6. Follow existing naming conventions
+
+## Design System
+
+### Required Components
+```tsx
+// YES - Use design system
+import { Button, Input, Card } from '@/components/ui';
+
+// NO - Never use raw elements
+<button>...</button>
+<input type="text" />
+```
+
+### Color Variables
+```css
+/* Use CSS variables */
+var(--btn-primary-bg)
+var(--color-app-primary-500)
+
+/* Never hardcode */
+#3b82f6  /* NO */
+blue-500  /* Only in Tailwind classes */
+```
+
+## Backend Pattern
+
+```python
+# backend/app/modules/<name>/router.py
+from fastapi import APIRouter, Depends
+from app.api.deps import get_db, get_current_user
+
+router = APIRouter()
+
+@router.get("/items")
+async def list_items(
+    db = Depends(get_db),
+    user = Depends(get_current_user),
+):
+    # async database operations
+    return await db.items.find().to_list(100)
+```
+
+## Frontend Pattern
+
+```tsx
+// frontend/src/pages/<Name>.tsx
+import { Button, Card, Input } from '@/components/ui';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api';
+
+export default function MyPage() {
+  const { data } = useQuery({
+    queryKey: ['items'],
+    queryFn: () => api.get('/items'),
+  });
+
+  return (
+    <Card>
+      <Button variant="primary">Action</Button>
+    </Card>
+  );
+}
+```
+
+## File Locations
+
+| Type | Location |
+|------|----------|
+| Backend modules | `backend/app/modules/<name>/` |
+| Frontend pages | `frontend/src/pages/` |
+| UI components | `frontend/src/components/ui/` |
+| Design tokens | `frontend/src/design-system/design-tokens.css` |
+| App config | `system.config.json` |
+
+## App Generation
+
+Use the generator for new modules:
+```bash
+./generate-app.sh
+```
+
+Don't manually create files in:
+- `backend/app/modules/`
+- `frontend/src/pages/generated/`
+
+## Verification
+
+Always run before committing:
+```bash
+./verify-project.sh
+```
+
+## Email Setup
+
+`EMAIL_PROVIDER` options:
+- `console` - Dev mode (logs only)
+- `smtp` - SMTP server
+- `resend` - Resend.com API

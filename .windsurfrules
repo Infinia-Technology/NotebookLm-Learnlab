@@ -1,0 +1,90 @@
+# SAIL Starter Kit - Windsurf Rules
+
+## Project Context
+
+Fullstack platform template with app generation capabilities.
+
+Stack:
+- Backend: FastAPI + Pydantic v2 + MongoDB (Motor async)
+- Frontend: React 19 + TypeScript + Vite + TailwindCSS v4
+- State: Zustand + React Query
+- Auth: JWT + bcrypt
+
+## Strict Rules
+
+### Forbidden Actions
+- NO new frameworks or libraries without approval
+- NO modifications to docker-compose.yml without asking
+- NO bypassing authentication or RBAC checks
+- NO inline CSS - use Tailwind utilities only
+- NO raw HTML elements - use design system components
+- NO hardcoded colors - use CSS variables
+- NO manual file creation in modules/ or pages/generated/
+
+### Required Patterns
+
+**Backend:**
+- All DB operations must be async/await
+- All functions must have type hints
+- All inputs validated with Pydantic
+- Use Depends() for dependency injection
+
+**Frontend:**
+- Use components from `components/ui/` only
+- Use `var(--color-name)` for all colors
+- Interfaces for all props
+- Functional components with hooks
+
+## Design System Components
+
+Location: `frontend/src/components/ui/`
+
+| Use This | Not This |
+|----------|----------|
+| `<Button>` | `<button>` |
+| `<Input>` | `<input>` |
+| `<Select>` | `<select>` |
+| `<Card>` | `<div className="border...">` |
+| `<Modal>` | Custom modal divs |
+
+## File Structure
+
+```
+backend/app/modules/<name>/
+├── __init__.py
+├── router.py      # FastAPI endpoints
+├── schemas.py     # Pydantic models
+└── service.py     # Business logic
+
+frontend/src/pages/<Name>.tsx
+frontend/src/components/ui/<Component>.tsx
+```
+
+## Configuration
+
+- App config: `system.config.json`
+- Design tokens: `frontend/src/design-system/design-tokens.css`
+- Environment: `.env` (copy from `.env.example`)
+
+## Commands
+
+```bash
+./generate-app.sh      # Generate new app module
+./verify-project.sh    # Verify project compliance
+docker compose up -d   # Start services
+```
+
+## Email Providers
+
+Set `EMAIL_PROVIDER` in .env:
+- `console` - Development (logs only)
+- `smtp` - SMTP server (Gmail, Outlook, etc.)
+- `resend` - Resend API
+
+## Protected Files
+
+Review before modifying:
+- `backend/app/core/*`
+- `backend/app/auth/*`
+- `frontend/src/components/ui/*`
+- `system.config.json`
