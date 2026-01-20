@@ -1,160 +1,64 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Settings,
-  Users,
-  ShieldCheck,
+  KeyRound,
+  User,
   ArrowRight,
-  Loader2,
+  HelpCircle,
+  BookOpen,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useSystemConfig } from '../hooks/useSystemConfig';
-import { getAdminStats } from '../lib/api';
 import { PageLayout } from '../components/layout/PageLayout';
 
-interface DashboardStats {
-  totalUsers: number;
-  activeUsers: number;
-  pendingUsers: number;
-  superAdmins: number;
-  isLoading: boolean;
-}
-
 export default function Dashboard() {
-  const { user, isSuperAdmin } = useAuth();
+  const { user } = useAuth();
   const { config } = useSystemConfig();
-  const [stats, setStats] = useState<DashboardStats>({
-    totalUsers: 0,
-    activeUsers: 0,
-    pendingUsers: 0,
-    superAdmins: 0,
-    isLoading: true,
-  });
-
-  useEffect(() => {
-    // Only fetch stats if user is super admin
-    if (!isSuperAdmin) {
-      setStats(prev => ({ ...prev, isLoading: false }));
-      return;
-    }
-
-    const fetchStats = async () => {
-      try {
-        const userStats = await getAdminStats();
-        setStats({
-          totalUsers: userStats.total_users || 0,
-          activeUsers: userStats.active_users || 0,
-          pendingUsers: userStats.pending_users || 0,
-          superAdmins: userStats.super_admins || 0,
-          isLoading: false,
-        });
-      } catch (error) {
-        console.error('Failed to fetch stats:', error);
-        setStats(prev => ({ ...prev, isLoading: false }));
-      }
-    };
-
-    fetchStats();
-  }, [isSuperAdmin]);
 
   return (
     <PageLayout
       title={`Welcome${user?.first_name ? `, ${user.first_name}` : ''}!`}
-      subtitle={`This is your ${config.app.name} dashboard. Here's what's happening today.`}
+      subtitle={`Your ${config.app.name} dashboard`}
     >
-      {/* Stats Cards - Only show for super admin */}
-      {isSuperAdmin && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <StatCard
-            title="Total Users"
-            value={stats.totalUsers}
-            icon={Users}
-            color="blue"
-            isLoading={stats.isLoading}
-          />
-          <StatCard
-            title="Active Users"
-            value={stats.activeUsers}
-            icon={ShieldCheck}
-            color="green"
-            isLoading={stats.isLoading}
-          />
-          <StatCard
-            title="Pending Users"
-            value={stats.pendingUsers}
-            icon={Users}
-            color="amber"
-            isLoading={stats.isLoading}
-          />
-          <StatCard
-            title="Super Admins"
-            value={stats.superAdmins}
-            icon={ShieldCheck}
-            color="purple"
-            isLoading={stats.isLoading}
-          />
-        </div>
-      )}
-
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <QuickActionCard
-          title="Account Settings"
-          description="Manage your profile and preferences"
-          icon={Settings}
+          title="My Profile"
+          description="View and edit your profile information"
+          icon={User}
           href="/dashboard/account"
           color="sky"
         />
-        {isSuperAdmin && (
-          <QuickActionCard
-            title="User Management"
-            description="Manage users and roles"
-            icon={Users}
-            href="/admin/users"
-            color="emerald"
-          />
-        )}
+        <QuickActionCard
+          title="Account Settings"
+          description="Manage your account preferences"
+          icon={Settings}
+          href="/dashboard/account"
+          color="violet"
+        />
+        <QuickActionCard
+          title="Change Password"
+          description="Update your password"
+          icon={KeyRound}
+          href="/dashboard/account?tab=security"
+          color="amber"
+        />
+        <QuickActionCard
+          title="Documentation"
+          description="Learn how to use the platform"
+          icon={BookOpen}
+          href="/docs"
+          color="emerald"
+        />
+        <QuickActionCard
+          title="Help & Support"
+          description="Get help with any issues"
+          icon={HelpCircle}
+          href="/help"
+          color="rose"
+        />
       </div>
     </PageLayout>
-  );
-}
-
-function StatCard({
-  title,
-  value,
-  icon: Icon,
-  color,
-  isLoading,
-}: {
-  title: string;
-  value: number;
-  icon: React.ElementType;
-  color: 'blue' | 'green' | 'amber' | 'purple';
-  isLoading: boolean;
-}) {
-  const colorClasses = {
-    blue: 'bg-blue-100 text-blue-600',
-    green: 'bg-emerald-100 text-emerald-600',
-    amber: 'bg-amber-100 text-amber-600',
-    purple: 'bg-purple-100 text-purple-600',
-  };
-
-  return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <div className="flex items-center gap-4">
-        <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${colorClasses[color]}`}>
-          <Icon className="w-6 h-6" />
-        </div>
-        <div>
-          {isLoading ? (
-            <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
-          ) : (
-            <p className="text-2xl font-bold text-gray-900">{value}</p>
-          )}
-          <p className="text-sm text-gray-500">{title}</p>
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -169,11 +73,14 @@ function QuickActionCard({
   description: string;
   icon: React.ElementType;
   href: string;
-  color: 'sky' | 'emerald';
+  color: 'sky' | 'emerald' | 'violet' | 'amber' | 'rose';
 }) {
   const colorClasses = {
     sky: 'bg-sky-100 text-sky-600 group-hover:bg-sky-200',
     emerald: 'bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200',
+    violet: 'bg-violet-100 text-violet-600 group-hover:bg-violet-200',
+    amber: 'bg-amber-100 text-amber-600 group-hover:bg-amber-200',
+    rose: 'bg-rose-100 text-rose-600 group-hover:bg-rose-200',
   };
 
   return (
