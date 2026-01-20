@@ -1,20 +1,11 @@
 import { NavLink } from 'react-router-dom';
 import {
-  FileText,
-  Settings,
   Users,
   ShieldCheck,
   Globe,
-  Database,
-  Link2,
-  FileUp,
   PanelLeftClose,
   PanelLeft,
   LayoutDashboard,
-  UserCircle,
-  Briefcase,
-  Sliders,
-  Building2,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useSystemConfig } from '../../hooks/useSystemConfig';
@@ -32,18 +23,8 @@ interface NavItem {
 
 const adminNavigation: NavItem[] = [
   { name: 'Admin Dashboard', href: '/admin', icon: LayoutDashboard },
-  { name: 'App Configuration', href: '/admin/config', icon: Sliders },
-  { name: 'Audited Statements', href: '/admin/audited-statements', icon: FileText },
-  { name: 'Reference Data', href: '/admin/reference-data', icon: Settings },
   { name: 'User Management', href: '/admin/users', icon: Users },
-  { name: 'Company Access', href: '/admin/company-access', icon: ShieldCheck },
   { name: 'Domain Management', href: '/admin/domains', icon: Globe },
-  { name: 'Storage Manager', href: '/admin/storage', icon: Database },
-  { name: 'EPM Links', href: '/admin/epm-links', icon: Link2 },
-  { name: 'Upload Data', href: '/admin/upload-data', icon: FileUp },
-  { name: 'Job Management', href: '/admin/jobs', icon: Briefcase },
-  { name: 'Employee Profiles', href: '/admin/employee-profiles', icon: UserCircle },
-  { name: 'Entities', href: '/admin/entities', icon: Building2 },
 ];
 
 export function AdminSidebar({ collapsed = false, onToggle }: AdminSidebarProps) {

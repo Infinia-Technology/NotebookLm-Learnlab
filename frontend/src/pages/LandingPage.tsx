@@ -126,13 +126,9 @@ export function LandingPage() {
               Create your account and start building with {app.name} today.
             </p>
             <Link to="/auth/signup">
-              <Button
-                variant="primary"
-                size="lg"
-                className="bg-white text-gray-900 hover:bg-gray-100"
-              >
+              <button className="px-6 py-3 bg-white text-gray-900 font-medium rounded-lg hover:bg-gray-100 transition-colors">
                 Create your account
-              </Button>
+              </button>
             </Link>
           </Card>
         </div>

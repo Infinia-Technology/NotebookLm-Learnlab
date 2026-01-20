@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useAuthLayout } from '../../components/layout/AuthLayout';
+import { useSystemConfig } from '../../hooks/useSystemConfig';
 import { useCountdown } from '../../hooks/useCountdown';
 import { Check, X, ArrowLeft } from 'lucide-react';
 import { validatePassword } from '../../lib/validation';
@@ -18,6 +19,7 @@ export function ResetPasswordPage() {
 
   const { resetPassword, forgotPassword } = useAuth();
   const { setError, setSuccess, clearMessages } = useAuthLayout();
+  const { config } = useSystemConfig();
   const { isActive: isResendDisabled, formattedTime, start: startCooldown } = useCountdown(120, true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -93,10 +95,22 @@ export function ResetPasswordPage() {
 
       {/* Logo */}
       <div className="flex justify-center items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-[var(--btn-primary-bg)] rounded-lg flex items-center justify-center">
-          <span className="text-white font-bold text-lg">A</span>
+        <img
+          src="/logo-icon.svg"
+          alt={config.app.name}
+          className="w-10 h-10"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            if (target.nextElementSibling) {
+              (target.nextElementSibling as HTMLElement).style.display = 'flex';
+            }
+          }}
+        />
+        <div className="w-10 h-10 bg-[var(--btn-primary-bg)] rounded-lg items-center justify-center hidden">
+          <span className="text-white font-bold text-lg">{config.app.name.charAt(0)}</span>
         </div>
-        <span className="text-lg font-bold text-gray-800">App</span>
+        <span className="text-lg font-bold text-gray-800">{config.app.name}</span>
       </div>
 
       {/* Email badge */}

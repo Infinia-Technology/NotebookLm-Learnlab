@@ -12,7 +12,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ChevronRight,
   Home,
-  User,
   Settings,
   LogOut,
   ChevronDown,
@@ -31,13 +30,9 @@ interface BreadcrumbItem {
 // Route to breadcrumb mapping
 const routeBreadcrumbs: Record<string, BreadcrumbItem[]> = {
   '/dashboard': [{ label: 'Dashboard' }],
-  '/dashboard/my-profile': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Profile' },
-  ],
   '/dashboard/account': [
     { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Settings' },
+    { label: 'Account Settings' },
   ],
 };
 
@@ -188,14 +183,6 @@ export function HeaderBar() {
 
                 {/* Menu Items */}
                 <div className="py-1.5">
-                  <Link
-                    to="/dashboard/my-profile"
-                    onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    <User className="w-4 h-4 text-gray-400" />
-                    My Profile
-                  </Link>
                   <Link
                     to="/dashboard/account"
                     onClick={() => setDropdownOpen(false)}

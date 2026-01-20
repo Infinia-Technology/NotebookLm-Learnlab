@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   Settings,
-  User,
   PanelLeftClose,
   PanelLeft,
   ChevronDown,
@@ -68,7 +67,6 @@ const coreNavigation: NavItem[] = [
 
 // Settings navigation items
 const settingsNavigation: NavItem[] = [
-  { name: 'Profile', href: '/dashboard/my-profile', icon: User },
   { name: 'Account', href: '/dashboard/account', icon: Settings },
 ];
 

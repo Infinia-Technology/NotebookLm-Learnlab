@@ -9,4 +9,4 @@
 
 export { apiClient } from './api';
 export { AuthProvider, useAuth } from './auth';
-export { ProtectedRoute, PublicRoute, DefaultRedirect } from './router';
+export { ProtectedRoute, PublicRoute } from './router';

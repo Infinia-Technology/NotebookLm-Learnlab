@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ChevronRight,
   Home,
-  User,
   Settings,
   LogOut,
   ChevronDown,
@@ -21,14 +20,6 @@ interface BreadcrumbItem {
 // Admin route to breadcrumb mapping
 const adminRouteBreadcrumbs: Record<string, BreadcrumbItem[]> = {
   '/admin': [{ label: 'Admin Dashboard' }],
-  '/admin/audited-statements': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Audited Statements' },
-  ],
-  '/admin/reference-data': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Reference Data' },
-  ],
   '/admin/users': [
     { label: 'Admin', href: '/admin' },
     { label: 'User Management' },
@@ -38,53 +29,9 @@ const adminRouteBreadcrumbs: Record<string, BreadcrumbItem[]> = {
     { label: 'Users', href: '/admin/users' },
     { label: 'Create' },
   ],
-  '/admin/company-access': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Company Access' },
-  ],
   '/admin/domains': [
     { label: 'Admin', href: '/admin' },
     { label: 'Domain Management' },
-  ],
-  '/admin/storage': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Storage Manager' },
-  ],
-  '/admin/epm-links': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'EPM Links' },
-  ],
-  '/admin/consolidated-upload': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Consolidated Upload' },
-  ],
-  '/admin/upload-data': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Upload Data' },
-  ],
-  '/admin/upload-data/balance-sheet': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Upload Data', href: '/admin/upload-data' },
-    { label: 'Balance Sheet' },
-  ],
-  '/admin/upload-data/income-statement': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Upload Data', href: '/admin/upload-data' },
-    { label: 'Income Statement' },
-  ],
-  '/admin/upload-data/unified': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Upload Data', href: '/admin/upload-data' },
-    { label: 'Smart Upload' },
-  ],
-  '/admin/employee-profiles': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Employee Profiles' },
-  ],
-  '/admin/employee-profiles/create': [
-    { label: 'Admin', href: '/admin' },
-    { label: 'Employee Profiles', href: '/admin/employee-profiles' },
-    { label: 'Create' },
   ],
 };
 
@@ -99,14 +46,6 @@ const adminDynamicBreadcrumbs: Array<{
       { label: 'Admin', href: '/admin' },
       { label: 'Users', href: '/admin/users' },
       { label: 'Edit User' },
-    ],
-  },
-  {
-    pattern: /^\/admin\/employee-profiles\/([^/]+)\/edit$/,
-    getBreadcrumbs: () => [
-      { label: 'Admin', href: '/admin' },
-      { label: 'Employee Profiles', href: '/admin/employee-profiles' },
-      { label: 'Edit' },
     ],
   },
 ];
@@ -238,14 +177,6 @@ export function AdminHeader() {
 
                 {/* Menu Items */}
                 <div className="py-1">
-                  <Link
-                    to="/dashboard/my-profile"
-                    onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    <User className="w-4 h-4 text-gray-400" />
-                    My Profile
-                  </Link>
                   <Link
                     to="/dashboard/account"
                     onClick={() => setDropdownOpen(false)}

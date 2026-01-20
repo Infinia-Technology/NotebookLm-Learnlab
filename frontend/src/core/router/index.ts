@@ -2,4 +2,4 @@
  * Core Router exports.
  */
 
-export { ProtectedRoute, PublicRoute, DefaultRedirect } from './guards';
+export { ProtectedRoute, PublicRoute } from './guards';

@@ -12,13 +12,6 @@ interface RouteGuardProps {
 }
 
 /**
- * Gets the default landing page based on user role.
- */
-function getDefaultRoute(isSuperAdmin: boolean): string {
-  return isSuperAdmin ? '/dashboard/groups' : '/dashboard';
-}
-
-/**
  * Protects routes that require authentication.
  * Redirects to landing page if not authenticated.
  */
@@ -42,29 +35,14 @@ export function ProtectedRoute({ children }: RouteGuardProps) {
 
 /**
  * Protects routes that should only be accessed when NOT authenticated.
- * Redirects to appropriate home page if already authenticated.
- * Super admins go to /dashboard/groups, others go to /dashboard
+ * Redirects to dashboard if already authenticated.
  */
 export function PublicRoute({ children }: RouteGuardProps) {
-  const { isAuthenticated, isSuperAdmin } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to={getDefaultRoute(isSuperAdmin)} replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
-}
-
-/**
- * Redirects to the appropriate default page based on user role.
- * Use this as the element for the "/dashboard" route.
- */
-export function DefaultRedirect() {
-  const { isSuperAdmin } = useAuth();
-
-  if (isSuperAdmin) {
-    return <Navigate to="/dashboard/groups" replace />;
-  }
-
-  return null; // Will render the Dashboard for non-super_admin
 }

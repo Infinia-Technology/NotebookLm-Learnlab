@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ChevronRight,
   Home,
-  User,
   Settings,
   LogOut,
   ChevronDown,
@@ -21,142 +20,16 @@ interface BreadcrumbItem {
 // Route to breadcrumb mapping
 const routeBreadcrumbs: Record<string, BreadcrumbItem[]> = {
   '/dashboard': [{ label: 'Dashboard' }],
-  '/dashboard/hierarchy': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Hierarchy' },
-  ],
-  '/dashboard/groups': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Groups' },
-  ],
-  '/dashboard/companies': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Companies' },
-  ],
-  '/dashboard/companies/tree': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Companies', href: '/dashboard/companies' },
-    { label: 'Tree View' },
-  ],
-  '/dashboard/financials': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Financials' },
-  ],
-  '/dashboard/comparison': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Comparison' },
-  ],
-  '/dashboard/forecasts': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Forecasts' },
-  ],
-  '/dashboard/chat': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'AI Chat' },
-  ],
-  '/dashboard/my-profile': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'My Profile' },
-  ],
-  '/dashboard/my-profile/add-memory': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'My Profile', href: '/dashboard/my-profile' },
-    { label: 'Add Memory' },
-  ],
-  '/dashboard/employee-profile': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Employee Profiles' },
-  ],
-  '/dashboard/employee-profile/create': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Employee Profiles', href: '/dashboard/employee-profile' },
-    { label: 'Create' },
-  ],
-  '/dashboard/upload': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Upload Company Data' },
-  ],
-  '/dashboard/audited-statements': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Audited Statements' },
-  ],
-  '/dashboard/reference-data': [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Reference Data' },
-  ],
   '/dashboard/account': [
     { label: 'Dashboard', href: '/dashboard' },
     { label: 'Account Settings' },
   ],
 };
 
-// Dynamic route patterns
-const dynamicBreadcrumbs: Array<{
-  pattern: RegExp;
-  getBreadcrumbs: (match: RegExpMatchArray) => BreadcrumbItem[];
-}> = [
-    {
-      pattern: /^\/dashboard\/groups\/([^/]+)$/,
-      getBreadcrumbs: (match) => [
-        { label: 'Dashboard', href: '/dashboard' },
-        { label: 'Groups', href: '/dashboard/groups' },
-        { label: match[1] },
-      ],
-    },
-    {
-      pattern: /^\/dashboard\/companies\/([^/]+)$/,
-      getBreadcrumbs: (match) => [
-        { label: 'Dashboard', href: '/dashboard' },
-        { label: 'Companies', href: '/dashboard/companies' },
-        { label: match[1] },
-      ],
-    },
-    {
-      pattern: /^\/dashboard\/financial-data\/([^/]+)$/,
-      getBreadcrumbs: (match) => [
-        { label: 'Dashboard', href: '/dashboard' },
-        { label: 'Financials', href: '/dashboard/financials' },
-        { label: match[1] },
-      ],
-    },
-    {
-      pattern: /^\/dashboard\/c\/([^/]+)$/,
-      getBreadcrumbs: () => [
-        { label: 'Dashboard', href: '/dashboard' },
-        { label: 'AI Chat', href: '/dashboard/chat' },
-        { label: 'Conversation' },
-      ],
-    },
-    {
-      pattern: /^\/dashboard\/g\/([^/]+)$/,
-      getBreadcrumbs: () => [
-        { label: 'Dashboard', href: '/dashboard' },
-        { label: 'AI Chat', href: '/dashboard/chat' },
-        { label: 'Agent' },
-      ],
-    },
-    {
-      pattern: /^\/dashboard\/my-profile\/edit-memory\/([^/]+)$/,
-      getBreadcrumbs: () => [
-        { label: 'Dashboard', href: '/dashboard' },
-        { label: 'My Profile', href: '/dashboard/my-profile' },
-        { label: 'Edit Memory' },
-      ],
-    },
-  ];
-
 function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
   // Check static routes first
   if (routeBreadcrumbs[pathname]) {
     return routeBreadcrumbs[pathname];
-  }
-
-  // Check dynamic patterns
-  for (const { pattern, getBreadcrumbs: getItems } of dynamicBreadcrumbs) {
-    const match = pathname.match(pattern);
-    if (match) {
-      return getItems(match);
-    }
   }
 
   // Default fallback
@@ -276,14 +149,6 @@ export function DashboardHeader() {
 
               {/* Menu Items */}
               <div className="py-1">
-                <Link
-                  to="/dashboard/my-profile"
-                  onClick={() => setDropdownOpen(false)}
-                  className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <User className="w-4 h-4 text-gray-400" />
-                  My Profile
-                </Link>
                 <Link
                   to="/dashboard/account"
                   onClick={() => setDropdownOpen(false)}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useAuthLayout } from '../../components/layout/AuthLayout';
+import { useSystemConfig } from '../../hooks/useSystemConfig';
 import { Check, X } from 'lucide-react';
 import { validatePassword } from '../../lib/validation';
 import { Input } from '../../components/ui/Input';
@@ -18,6 +19,7 @@ export function SignupPage() {
 
   const { signup } = useAuth();
   const { setError, setSuccess, clearMessages } = useAuthLayout();
+  const { config } = useSystemConfig();
   const navigate = useNavigate();
 
   const passwordValidation = validatePassword(password);
@@ -59,10 +61,22 @@ export function SignupPage() {
     <form onSubmit={handleSubmit} className="px-10 py-10">
       {/* Logo */}
       <div className="flex justify-center items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-[var(--btn-primary-bg)] rounded-lg flex items-center justify-center">
-          <span className="text-white font-bold text-lg">A</span>
+        <img
+          src="/logo-icon.svg"
+          alt={config.app.name}
+          className="w-10 h-10"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            if (target.nextElementSibling) {
+              (target.nextElementSibling as HTMLElement).style.display = 'flex';
+            }
+          }}
+        />
+        <div className="w-10 h-10 bg-[var(--btn-primary-bg)] rounded-lg items-center justify-center hidden">
+          <span className="text-white font-bold text-lg">{config.app.name.charAt(0)}</span>
         </div>
-        <span className="text-lg font-bold text-gray-800">App</span>
+        <span className="text-lg font-bold text-gray-800">{config.app.name}</span>
       </div>
 
       <h1 className="text-2xl font-semibold text-gray-900 text-center mb-2">
