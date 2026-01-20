@@ -195,6 +195,48 @@ Copy `.env.example` to `.env` and configure:
 | `ADMIN_PASSWORD` | Initial admin password | Yes |
 | `CORS_ORIGINS` | Allowed CORS origins | No |
 | `REDIS_URL` | Redis connection URL | No |
+| `EMAIL_PROVIDER` | Email provider: `console`, `smtp`, `resend` | No |
+
+## Email Configuration
+
+The platform supports multiple email providers for OTP verification, password reset, and invitations.
+
+### Providers
+
+| Provider | Use Case | Setup |
+|----------|----------|-------|
+| `console` | Development - logs emails to console | Default, no config needed |
+| `smtp` | Any SMTP server (Gmail, Outlook, custom) | SMTP credentials |
+| `resend` | Modern transactional email API | API key from resend.com |
+
+### SMTP Setup (Gmail example)
+
+```bash
+EMAIL_PROVIDER=smtp
+EMAIL_FROM=noreply@yourdomain.com
+EMAIL_FROM_NAME=My App
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your@gmail.com
+SMTP_PASSWORD=your-app-password  # Use App Password, not regular password
+SMTP_USE_TLS=true
+```
+
+### Resend Setup
+
+```bash
+EMAIL_PROVIDER=resend
+EMAIL_FROM=noreply@yourdomain.com
+EMAIL_FROM_NAME=My App
+
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+```
+
+For Resend, install the optional dependency:
+```bash
+pip install -e ".[email]"
+```
 
 ## Adding New Features
 

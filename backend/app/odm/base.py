@@ -1,3 +1,4 @@
+
 """
 Mongoose-style Document base class for MongoDB with Motor.
 

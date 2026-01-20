@@ -59,6 +59,25 @@ class Settings(BaseSettings):
     # ==========================================================================
     APP_BASE_URL: str = "http://localhost:3100"
 
+    # ==========================================================================
+    # Email Configuration
+    # ==========================================================================
+    # Provider: console (dev), smtp, or resend
+    EMAIL_PROVIDER: str = "console"
+    EMAIL_FROM: str = "noreply@example.com"
+    EMAIL_FROM_NAME: str = "SAIL Starter Kit"
+
+    # SMTP settings (when EMAIL_PROVIDER=smtp)
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_USE_TLS: bool = True
+    SMTP_USE_SSL: bool = False
+
+    # Resend settings (when EMAIL_PROVIDER=resend)
+    RESEND_API_KEY: str = ""
+
     @property
     def cors_origins_list(self) -> list[str]:
         return json.loads(self.CORS_ORIGINS)
