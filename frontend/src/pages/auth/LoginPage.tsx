@@ -74,13 +74,15 @@ export function LoginPage() {
         <div className="w-10 h-10 bg-[var(--btn-primary-bg)] rounded-lg items-center justify-center hidden">
           <span className="text-white font-bold text-lg">{config.app.name.charAt(0)}</span>
         </div>
-        <span className="text-lg font-bold text-gray-800">{config.app.name}</span>
+        <span className="text-lg font-bold text-text-primary">{config.app.name}</span>
       </div>
 
-      <h1 className="text-2xl font-semibold text-gray-900 text-center mb-2">
-        Sign in
+      <h1 className="text-2xl font-semibold text-text-primary text-center mb-2">
+        Welcome back
       </h1>
-
+      <p className="text-sm text-text-secondary text-center mb-8">
+        to continue to {config.app.name}
+      </p>
       {/* Inline error message */}
       {emailError ? (
         <p className="text-sm text-red-600 text-center mb-4">
@@ -91,7 +93,7 @@ export function LoginPage() {
           </Link>
         </p>
       ) : (
-        <p className="text-sm text-gray-500 text-center mb-8">
+        <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-8">
           Enter your credentials to continue
         </p>
       )}
@@ -140,7 +142,7 @@ export function LoginPage() {
         </Button>
 
         <div className="text-center">
-          <span className="text-sm text-gray-500">No account? </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">No account? </span>
           <Link
             to="/auth/signup"
             className="text-sm text-[var(--btn-primary-bg)] hover:underline"

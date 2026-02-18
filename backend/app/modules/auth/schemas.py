@@ -5,6 +5,7 @@ Pydantic models for authentication requests and responses.
 """
 
 import re
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
@@ -89,6 +90,8 @@ class UserResponse(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     department: Optional[str] = None
+    created_at: Optional[datetime] = None
+    last_login_at: Optional[datetime] = None
 
 
 class RequestLoginOTPRequest(BaseModel):

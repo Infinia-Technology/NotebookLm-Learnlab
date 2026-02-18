@@ -1,5 +1,5 @@
 """
-SAIL Starter Kit API - Main Application
+EleVatria API - Main Application
 
 FastAPI application with MongoDB backend.
 """
@@ -15,6 +15,10 @@ from app.api.api import api_router
 from app.db import connect_to_mongo, close_mongo_connection, get_database
 from app.odm.document import Document
 from app.odm.user import UserDocument, GroupDocument, AuditLogDocument
+from app.odm.course import CourseDocument
+from app.odm.learning_module import LearningModuleDocument
+from app.odm.progress import ModuleProgressDocument
+from app.odm.assignment_submission import AssignmentSubmissionDocument
 
 
 def init_document_classes(db):
@@ -23,6 +27,19 @@ def init_document_classes(db):
     UserDocument.set_db(db)
     GroupDocument.set_db(db)
     AuditLogDocument.set_db(db)
+    CourseDocument.set_db(db)
+    CourseDocument.set_db(db)
+    LearningModuleDocument.set_db(db)
+    ModuleProgressDocument.set_db(db)
+    AssignmentSubmissionDocument.set_db(db)
+
+# Mount static files
+from fastapi.staticfiles import StaticFiles
+import os
+
+# Ensure static directory exists
+os.makedirs("app/static/uploads", exist_ok=True)
+
 
 
 @asynccontextmanager
@@ -42,6 +59,11 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"Error during database seeding: {e}")
 
+    # Log all registered routes
+    logger.info("Registered Routes:")
+    for route in app.routes:
+        logger.info(f"{route.path} [{route.name}]")
+
     logger.info("Application startup complete")
     yield
 
@@ -52,7 +74,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title=settings.APP_NAME,
-    description="SAIL Starter Kit API with MongoDB Backend",
+    description="EleVatria API with MongoDB Backend",
     version="1.0.0",
     lifespan=lifespan,
     docs_url="/api/docs",
@@ -74,6 +96,10 @@ app.add_middleware(
 
 # Include API routes
 app.include_router(api_router, prefix="/api")
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
 
 
 @app.get("/")

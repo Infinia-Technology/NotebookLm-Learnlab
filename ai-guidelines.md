@@ -2,13 +2,13 @@
 
 ## Project Architecture
 
-This is a fullstack platform template with the following stack:
+This is a fullstack platform template for EleVatria with the following stack:
 
 ### Backend (FastAPI + Python)
 - **Framework**: FastAPI with Pydantic v2
 - **Database**: MongoDB with Motor async driver
 - **Authentication**: JWT with bcrypt password hashing
-- **Structure**: Domain-driven modular architecture
+- **Structure**: EleVatria-driven modular architecture
 
 ### Frontend (React + TypeScript)
 - **Framework**: React 19 with Vite

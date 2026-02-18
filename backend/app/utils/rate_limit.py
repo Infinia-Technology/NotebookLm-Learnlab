@@ -12,7 +12,7 @@ from app.core.config import settings
 
 # Rate limit settings
 RATE_LIMIT_WINDOW = 60  # seconds
-RATE_LIMIT_MAX_REQUESTS = 5  # max requests per window
+RATE_LIMIT_MAX_REQUESTS = 100  # Increased for development
 
 _redis_client = None
 

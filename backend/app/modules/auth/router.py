@@ -113,6 +113,8 @@ async def get_me(
         first_name=current_user.first_name,
         last_name=current_user.last_name,
         department=current_user.department,
+        created_at=current_user.created_at,
+        last_login_at=current_user.last_login_at,
     )
 
 

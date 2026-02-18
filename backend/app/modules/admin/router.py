@@ -15,8 +15,43 @@ from app.modules.admin.schemas import (
     UserListResponse,
     AdminStatsResponse,
 )
+from app.modules.admin.domain_service import DomainService, CreateDomainRequest, UpdateDomainModulesRequest, DomainResponse
+from typing import List
 
 router = APIRouter()
+
+
+@router.get("/domains", response_model=List[DomainResponse])
+async def list_domains(
+    current_user: UserDocument = Depends(require_super_admin),
+    db: AsyncIOMotorDatabase = Depends(get_db),
+):
+    """List all enterprise domains."""
+    service = DomainService(db)
+    return await service.list_domains()
+
+
+@router.post("/domains", response_model=DomainResponse)
+async def create_domain(
+    data: CreateDomainRequest,
+    current_user: UserDocument = Depends(require_super_admin),
+    db: AsyncIOMotorDatabase = Depends(get_db),
+):
+    """Create a new enterprise domain."""
+    service = DomainService(db)
+    return await service.create_domain(data)
+
+
+@router.put("/domains/{domain_uuid}/modules", response_model=DomainResponse)
+async def update_domain_modules(
+    domain_uuid: str,
+    data: UpdateDomainModulesRequest,
+    current_user: UserDocument = Depends(require_super_admin),
+    db: AsyncIOMotorDatabase = Depends(get_db),
+):
+    """Update enabled modules for a domain."""
+    service = DomainService(db)
+    return await service.update_modules(domain_uuid, data.enabled_modules)
 
 
 @router.get("/stats", response_model=AdminStatsResponse)
@@ -98,7 +133,7 @@ async def delete_user(
     current_user: UserDocument = Depends(require_super_admin),
     db: AsyncIOMotorDatabase = Depends(get_db),
 ):
-    """Suspend a user (soft delete)."""
+    """Permanently delete a user."""
     if user_id == current_user.uuid:
         raise HTTPException(status_code=400, detail="Cannot delete yourself")
 

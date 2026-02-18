@@ -46,7 +46,7 @@ export function AccountSettings() {
       subtitle="Manage your profile and security settings"
     >
       {/* Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-gray-200 dark:border-gray-700">
         <nav className="-mb-px flex space-x-8">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -56,10 +56,10 @@ export function AccountSettings() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap
+                  flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors
                   ${isActive
-                    ? 'border-indigo-500 text-sky-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-indigo-500 text-sky-600 dark:text-sky-400'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   }
                 `}
               >
@@ -178,25 +178,25 @@ function ProfileTab() {
     <div className="space-y-6">
       {/* Success Message */}
       {successMessage && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
-          <Check className="w-5 h-5 text-green-600" />
-          <span className="text-green-700">{successMessage}</span>
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 flex items-center gap-3">
+          <Check className="w-5 h-5 text-green-600 dark:text-green-400" />
+          <span className="text-green-700 dark:text-green-300">{successMessage}</span>
         </div>
       )}
 
       {/* Error Message */}
       {errors.root && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-red-600" />
-          <span className="text-red-700">{errors.root.message}</span>
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+          <span className="text-red-700 dark:text-red-300">{errors.root.message}</span>
         </div>
       )}
 
       {/* Editable Profile Info */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <User className="w-5 h-5 text-gray-500" />
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             Personal Information
           </h2>
           {!isEditing ? (
@@ -239,8 +239,8 @@ function ProfileTab() {
               />
             ) : (
               <>
-                <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                <p className="text-gray-900 py-2.5">{profile?.first_name || '—'}</p>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
+                <p className="text-gray-900 dark:text-white py-2.5">{profile?.first_name || '—'}</p>
               </>
             )}
           </div>
@@ -255,8 +255,8 @@ function ProfileTab() {
               />
             ) : (
               <>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                <p className="text-gray-900 py-2.5">{profile?.last_name || '—'}</p>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
+                <p className="text-gray-900 dark:text-white py-2.5">{profile?.last_name || '—'}</p>
               </>
             )}
           </div>
@@ -271,11 +271,11 @@ function ProfileTab() {
               />
             ) : (
               <>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   <Building2 className="w-4 h-4 inline mr-1" />
                   Department
                 </label>
-                <p className="text-gray-900 py-2.5">{profile?.department || '—'}</p>
+                <p className="text-gray-900 dark:text-white py-2.5">{profile?.department || '—'}</p>
               </>
             )}
           </div>
@@ -291,11 +291,11 @@ function ProfileTab() {
               />
             ) : (
               <>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   <Phone className="w-4 h-4 inline mr-1" />
                   Phone Number
                 </label>
-                <p className="text-gray-900 py-2.5">{profile?.phone_number || '—'}</p>
+                <p className="text-gray-900 dark:text-white py-2.5">{profile?.phone_number || '—'}</p>
               </>
             )}
           </div>
@@ -303,27 +303,35 @@ function ProfileTab() {
       </div>
 
       {/* Read-Only Account Info */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-          <Shield className="w-5 h-5 text-gray-500" />
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
+          <Shield className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           Account Information
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               <Mail className="w-4 h-4 inline mr-1" />
               Email Address
             </label>
-            <p className="text-gray-900 py-2.5">{profile?.email}</p>
+            <p className="text-gray-900 dark:text-white py-2.5">{profile?.email}</p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               <Calendar className="w-4 h-4 inline mr-1" />
               Member Since
             </label>
-            <p className="text-gray-900 py-2.5">{formatDate(profile?.created_at || null)}</p>
+            <p className="text-gray-900 dark:text-white py-2.5">{formatDate(profile?.created_at || null)}</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <Lock className="w-4 h-4 inline mr-1" />
+              Last Login
+            </label>
+            <p className="text-gray-900 dark:text-white py-2.5">{formatDate(profile?.last_login_at || null)}</p>
           </div>
         </div>
       </div>
@@ -338,9 +346,9 @@ function PasswordCheck({ passed, label }: { passed: boolean; label: string }) {
       {passed ? (
         <Check className="w-4 h-4 text-green-500" />
       ) : (
-        <X className="w-4 h-4 text-slate-300" />
+        <X className="w-4 h-4 text-slate-300 dark:text-slate-600" />
       )}
-      <span className={`text-xs ${passed ? 'text-green-600' : 'text-slate-500'}`}>
+      <span className={`text-xs ${passed ? 'text-green-600 dark:text-green-400' : 'text-slate-500 dark:text-slate-400'}`}>
         {label}
       </span>
     </div>
@@ -407,30 +415,30 @@ function SecurityTab() {
     <div className="space-y-6">
       {/* Success Message */}
       {successMessage && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
-          <Check className="w-5 h-5 text-green-600" />
-          <span className="text-green-700">{successMessage}</span>
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 flex items-center gap-3">
+          <Check className="w-5 h-5 text-green-600 dark:text-green-400" />
+          <span className="text-green-700 dark:text-green-300">{successMessage}</span>
         </div>
       )}
 
       {/* Error Message */}
       {errors.root && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-red-600" />
-          <span className="text-red-700">{errors.root.message}</span>
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+          <span className="text-red-700 dark:text-red-300">{errors.root.message}</span>
         </div>
       )}
 
       {/* Change Password */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-          <Lock className="w-5 h-5 text-gray-500" />
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
+          <Lock className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           Change Password
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-md space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               New Password
             </label>
             <div className="relative">
@@ -443,7 +451,7 @@ function SecurityTab() {
               <button
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
@@ -451,8 +459,8 @@ function SecurityTab() {
 
             {/* Password Requirements */}
             {showPasswordRules && (
-              <div className="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-                <p className="text-xs font-medium text-slate-600 mb-2">Password requirements:</p>
+              <div className="mt-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-800">
+                <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Password requirements:</p>
                 <div className="space-y-1">
                   <PasswordCheck passed={passwordValidation.checks.minLength} label="At least 8 characters" />
                   <PasswordCheck passed={passwordValidation.checks.hasUppercase} label="At least 1 uppercase letter (A-Z)" />
@@ -465,7 +473,7 @@ function SecurityTab() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Confirm Password
             </label>
             <div className="relative">
@@ -478,7 +486,7 @@ function SecurityTab() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
@@ -497,9 +505,9 @@ function SecurityTab() {
       </div>
 
       {/* Password Tips */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-        <h3 className="text-sm font-semibold text-blue-900 mb-3">Password Security Tips</h3>
-        <ul className="text-sm text-blue-700 space-y-2">
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
+        <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-3">Password Security Tips</h3>
+        <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-2">
           <li className="flex items-start gap-2">
             <Check className="w-4 h-4 mt-0.5 flex-shrink-0" />
             Use a combination of uppercase and lowercase letters

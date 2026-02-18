@@ -1,5 +1,5 @@
 /**
- * API client for SAIL Starter Kit.
+ * API client for EleVatria.
  */
 
 import axios from 'axios';
@@ -11,6 +11,9 @@ import type {
   UpdateUserRequest,
   TokenResponse,
   AdminStats,
+  SystemModule,
+  ModulePreview,
+  InstallCustomization,
 } from '../types';
 
 const api = axios.create({
@@ -179,4 +182,127 @@ export const deleteUser = async (userId: string): Promise<void> => {
   await api.delete(`/admin/users/${userId}`);
 };
 
+
+// ===================== Enterprise Marketplace =====================
+
+export const getModuleCatalog = async (filters?: { search?: string; category?: string; level?: string }): Promise<SystemModule[]> => {
+  const { data } = await api.get('/enterprise/catalog', { params: filters });
+  return data;
+};
+
+export const getModulePreview = async (moduleId: string): Promise<ModulePreview> => {
+  const { data } = await api.get(`/enterprise/catalog/${moduleId}/preview`);
+  return data;
+};
+
+export const customInstallModule = async (installData: InstallCustomization): Promise<{ message: string }> => {
+  const { data } = await api.post('/enterprise/custom-install', installData);
+  return data;
+};
+
+export const installModule = async (moduleId: string): Promise<{ message: string }> => {
+  const { data } = await api.post('/enterprise/modules', { module_id: moduleId });
+  return data;
+};
+
+export const uninstallModule = async (moduleId: string): Promise<{ message: string }> => {
+  const { data } = await api.delete(`/enterprise/modules/${moduleId}`);
+  return data;
+};
+
+// ===================== Learning & Analytics =====================
+
+export const listCourses = async () => {
+  const { data } = await api.get('/learning/courses');
+  return data;
+};
+
+export const enrollInCourse = async (courseUuid: string, credentials: { email: string; password: string }) => {
+  const { data } = await api.post(`/learning/courses/${courseUuid}/enroll`, credentials);
+  return data;
+};
+
+export const createCourse = async (courseData: { title: string; description?: string }) => {
+  const { data } = await api.post('/learning/admin/courses', courseData);
+  return data;
+};
+
+export const listModules = async (courseUuid: string) => {
+  const { data } = await api.get(`/learning/courses/${courseUuid}/modules`);
+  return data;
+};
+
+export const createModule = async (moduleData: any) => {
+  const { data } = await api.post('/learning/admin/modules', moduleData);
+  return data;
+};
+
+export const deleteModule = async (moduleUuid: string) => {
+  const { data } = await api.delete(`/learning/admin/modules/${moduleUuid}`);
+  return data;
+};
+
+export const updateProgress = async (moduleUuid: string, progressData: any) => {
+  const { data } = await api.post(`/learning/modules/${moduleUuid}/progress`, progressData);
+  return data;
+};
+
+export const uploadFile = async (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const { data } = await api.post('/learning/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return data;
+};
+
+export const submitAssignment = async (assignmentData: any) => {
+  const { data } = await api.post('/learning/assignments', assignmentData);
+  return data;
+};
+
+export const reviewAssignment = async (submissionUuid: string, reviewData: any) => {
+  const { data } = await api.post(`/learning/assignments/${submissionUuid}/review`, reviewData);
+  return data;
+};
+
+export const getAdminAnalytics = async () => {
+  const { data } = await api.get('/learning/admin/analytics/overview');
+  return data;
+};
+
+
+export const downloadCertificate = async (courseUuid: string, courseTitle: string) => {
+  const { data } = await api.get(`/learning/certificates/${courseUuid}/download`, {
+    responseType: 'blob', // Important for file download
+  });
+
+  // Create a URL for the blob
+  const url = window.URL.createObjectURL(new Blob([data]));
+  const link = document.createElement('a');
+  link.href = url;
+
+  // Set the filename
+  const filename = `Certificate-${courseTitle.replace(/\s+/g, '-')}.pdf`;
+  link.setAttribute('download', filename);
+
+  // Append to body, click, and remove
+  document.body.appendChild(link);
+  link.click();
+
+  // Clean up
+  link.parentNode?.removeChild(link);
+  window.URL.revokeObjectURL(url);
+};
+
+export const sendCertificate = async (courseUuid: string, managerEmail: string): Promise<{ message: string }> => {
+  const { data } = await api.post(`/learning/certificates/${courseUuid}/send`, {
+    manager_email: managerEmail,
+  });
+  return data;
+};
+
 export default api;
+

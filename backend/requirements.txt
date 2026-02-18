@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+motor
+beanie
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
+email-validator
+resend
+aiosmtplib
+reportlab
+python-dotenv
+httpx
+pytest
+pytest-asyncio

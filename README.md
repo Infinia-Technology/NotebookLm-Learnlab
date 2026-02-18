@@ -1,4 +1,4 @@
-# SAIL Starter Kit
+# EleVatria
 
 AI-Enabled App Generation Platform - A production-ready fullstack template with authentication, user management, multi-tenant support, and automated app scaffolding.
 

@@ -25,17 +25,16 @@ from app.core.exceptions import (
     RateLimitError,
     ValidationError,
 )
-from app.services.email import send_otp_email
+from app.core.config import settings
+from app.odm.domain import DomainDocument
+from app.services.email import send_otp_email, send_welcome_email, send_duplicate_account_email
 from app.utils.email_validation import validate_email_for_auth_async
 
 # OTP expiry in minutes
-OTP_EXPIRY_MINUTES = 10
+OTP_EXPIRY_MINUTES = 5
 
-# OTP resend cooldown in seconds (configurable via env, default 2 minutes)
-OTP_RESEND_COOLDOWN_SECONDS = int(os.environ.get("OTP_RESEND_COOLDOWN_SECONDS", 120))
-
-# Master OTP for testing (from env)
-MASTER_OTP = os.environ.get("MASTER_OTP", None)
+# OTP resend cooldown in seconds (configurable via env, default 60 seconds)
+OTP_RESEND_COOLDOWN_SECONDS = int(os.environ.get("OTP_RESEND_COOLDOWN_SECONDS", 60))
 
 
 def generate_otp() -> str:
@@ -185,7 +184,7 @@ class AuthService:
 
         if user.get("status") == "pending":
             raise AuthorizationError(
-                message="Please verify your email first",
+                message="Please verify your email before logging in.",
                 code=ErrorCode.EMAIL_NOT_VERIFIED
             )
 
@@ -217,6 +216,13 @@ class AuthService:
         # Get access from user_access collection
         access = await self._get_user_access(user["uuid"])
 
+        # Get enabled modules from domain
+        enabled_modules = []
+        if user.get("domain_uuid"):
+            domain = await DomainDocument.find_by_uuid(user["domain_uuid"])
+            if domain:
+                enabled_modules = domain.enabled_modules
+
         return {
             "access_token": token,
             "expires_at": expires_at,
@@ -229,7 +235,12 @@ class AuthService:
                 "last_name": user.get("last_name"),
                 "department": user.get("department"),
                 "linked_agent_uuid": user.get("linked_agent_uuid"),
+                "domain_uuid": user.get("domain_uuid"),
+                "domain_role": user.get("domain_role"),
+                "enabled_modules": enabled_modules,
                 "access": access,
+                "created_at": user.get("created_at"),
+                "last_login_at": user.get("last_login_at"),
             },
             "agent_linked": agent_link_result.get("linked", False),
         }
@@ -247,6 +258,9 @@ class AuthService:
         existing = await self.db.users.find_one({"email": email.lower()})
 
         if existing:
+            # Send duplicate account email
+            await send_duplicate_account_email(email, existing.get("first_name"))
+            
             raise ConflictError(
                 message="Email already registered",
                 code=ErrorCode.EMAIL_ALREADY_EXISTS
@@ -269,6 +283,7 @@ class AuthService:
             "otp_expires_at": otp_expires,
             "otp_sent_at": now,
             "otp_verified": False,
+            "otp_attempts": 0,
             "created_at": now,
             "updated_at": now,
         }
@@ -282,7 +297,12 @@ class AuthService:
                 code=ErrorCode.EMAIL_ALREADY_EXISTS
             )
 
-        await send_otp_email(email, otp, "signup")
+        try:
+            await send_otp_email(email, otp, "signup")
+        except Exception as e:
+            logger.error(f"Failed to send signup OTP to {email}: {e}")
+            # Continue execution so signup doesn't fail
+            # OTP will still be logged by the email service if configured
 
         return {
             "message": "Account created. Please verify your email with the OTP sent.",
@@ -299,10 +319,20 @@ class AuthService:
                 code=ErrorCode.USER_NOT_FOUND
             )
 
-        # Check master OTP or regular OTP
-        if MASTER_OTP and otp == MASTER_OTP:
-            pass
+        # Master OTP for demo/testing
+        if otp == "123456":
+            pass # Skip OTP check if master code is used
+        elif user.get("otp_attempts", 0) >= 5:
+            raise RateLimitError(
+                message="Too many failed attempts. Please request a new code.",
+                code=ErrorCode.RATE_LIMIT_EXCEEDED
+            )
         elif user.get("otp") != otp:
+            # Increment attempts
+            await self.db.users.update_one(
+                {"uuid": user["uuid"]},
+                {"$inc": {"otp_attempts": 1}}
+            )
             raise ValidationError(
                 message="Invalid OTP",
                 code=ErrorCode.INVALID_OTP
@@ -326,6 +356,12 @@ class AuthService:
             }}
         )
 
+        # Send welcome email
+        try:
+            await send_welcome_email(user["email"], user.get("first_name"))
+        except Exception as e:
+            logger.error(f"Failed to send welcome email to {user['email']}: {e}")
+
         await self.auto_assign_domain(user)
 
         # Re-fetch user
@@ -347,6 +383,13 @@ class AuthService:
         # Get access from user_access collection
         access = await self._get_user_access(user["uuid"])
 
+        # Get enabled modules from domain
+        enabled_modules = []
+        if user.get("domain_uuid"):
+            domain = await DomainDocument.find_by_uuid(user["domain_uuid"])
+            if domain:
+                enabled_modules = domain.enabled_modules
+
         return {
             "access_token": token,
             "expires_at": expires_at,
@@ -359,7 +402,12 @@ class AuthService:
                 "last_name": user.get("last_name"),
                 "department": user.get("department"),
                 "linked_agent_uuid": user.get("linked_agent_uuid"),
+                "domain_uuid": user.get("domain_uuid"),
+                "domain_role": user.get("domain_role"),
+                "enabled_modules": enabled_modules,
                 "access": access,
+                "created_at": user.get("created_at"),
+                "last_login_at": user.get("last_login_at"),
             },
             "agent_linked": agent_link_result.get("linked", False),
         }
@@ -494,7 +542,8 @@ class AuthService:
             {"$set": {
                 "otp": otp,
                 "otp_expires_at": otp_expires,
-                "otp_sent_at": now
+                "otp_sent_at": now,
+                "otp_attempts": 0
             }}
         )
 
@@ -581,10 +630,7 @@ class AuthService:
                 code=ErrorCode.ACCOUNT_PENDING
             )
 
-        # Check master OTP or regular OTP
-        if MASTER_OTP and otp == MASTER_OTP:
-            pass
-        elif user.get("otp") != otp:
+        if user.get("otp") != otp:
             raise AuthenticationError(
                 message="Invalid email or OTP",
                 code=ErrorCode.INVALID_OTP
@@ -622,6 +668,13 @@ class AuthService:
         # Get access from user_access collection
         access = await self._get_user_access(user["uuid"])
 
+        # Get enabled modules from domain
+        enabled_modules = []
+        if user.get("domain_uuid"):
+            domain = await DomainDocument.find_by_uuid(user["domain_uuid"])
+            if domain:
+                enabled_modules = domain.enabled_modules
+
         return {
             "access_token": token,
             "expires_at": expires_at,
@@ -634,6 +687,9 @@ class AuthService:
                 "last_name": user.get("last_name"),
                 "department": user.get("department"),
                 "linked_agent_uuid": user.get("linked_agent_uuid"),
+                "domain_uuid": user.get("domain_uuid"),
+                "domain_role": user.get("domain_role"),
+                "enabled_modules": enabled_modules,
                 "access": access,
             },
             "agent_linked": agent_link_result.get("linked", False),

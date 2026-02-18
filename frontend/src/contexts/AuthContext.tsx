@@ -18,15 +18,7 @@ function extractErrorMessage(error: unknown, fallback: string): string {
   return fallback;
 }
 
-interface User {
-  uuid: string;
-  email: string;
-  role: string | null; // System role (super_admin, admin, editor, viewer)
-  status?: string;
-  first_name: string | null;
-  last_name: string | null;
-  department?: string | null;
-}
+import type { User } from '../types';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -41,6 +33,7 @@ interface AuthContextType {
   logout: () => void;
   updateUser: (updates: Partial<User>) => void;
   isSuperAdmin: boolean;
+  isDomainAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -180,6 +173,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout,
       updateUser,
       isSuperAdmin,
+      isDomainAdmin: user?.domain_role === 'admin' || user?.role === 'super_admin',
     }),
     [
       isAuthenticated,

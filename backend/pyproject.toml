@@ -1,7 +1,7 @@
 [project]
-name = "sail-starter-kit"
+name = "elevatria"
 version = "1.0.0"
-description = "SAIL Starter Kit - FastAPI + MongoDB Backend"
+description = "EleVatria - FastAPI + MongoDB Backend"
 requires-python = ">=3.9"
 dependencies = [
     "fastapi>=0.115.0",

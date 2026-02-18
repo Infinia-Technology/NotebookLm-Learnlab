@@ -18,6 +18,7 @@ from .blocked_domains import (
     get_domain_category,
     is_domain_blocked_combined,
 )
+from app.core.config import settings
 
 
 class EmailValidationResult(NamedTuple):
@@ -191,6 +192,15 @@ async def validate_email_for_auth_async(email: str) -> EmailValidationResult:
         )
 
     # Check blocklist (basic + custom)
+    # Skip if ALLOW_ALL_EMAIL_DOMAINS is enabled
+    if settings.ALLOW_ALL_EMAIL_DOMAINS:
+        return EmailValidationResult(
+            is_valid=True,
+            error_message=None,
+            domain=domain,
+            category=None,
+        )
+
     is_blocked, source = await is_domain_blocked_combined(domain)
     if is_blocked:
         category = get_domain_category(domain) if source == "basic" else "custom"

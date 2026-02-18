@@ -15,6 +15,10 @@ export interface User {
   created_at?: string;
   updated_at?: string;
   last_login_at?: string;
+  // Domain fields
+  domain_uuid?: string;
+  domain_role?: string;
+  enabled_modules?: string[];
 }
 
 export interface UserResponse {
@@ -29,6 +33,10 @@ export interface UserResponse {
   created_at?: string;
   updated_at?: string;
   last_login_at?: string;
+  // Domain fields
+  domain_uuid?: string;
+  domain_role?: string;
+  enabled_modules?: string[];
 }
 
 export interface UserListResponse {
@@ -87,4 +95,49 @@ export interface AdminStats {
   suspended_users: number;
   super_admins: number;
   by_status: Record<string, number>;
+}
+// Marketplace types
+export interface SystemModule {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  icon: string;
+  is_installed: boolean;
+  duration: string;
+  lessons_count: number;
+  level: string;
+  has_assignment: boolean;
+  last_updated: string;
+  version: string;
+}
+
+export interface LessonPreview {
+  title: string;
+  type: string;
+  duration?: string;
+}
+
+export interface ModulePreview {
+  id: string;
+  name: string;
+  full_description: string;
+  lessons: LessonPreview[];
+  quiz_preview?: {
+    title: string;
+    questions_count: number;
+  } | null;
+  assignment_preview?: {
+    title: string;
+    type: string;
+  } | null;
+}
+
+export interface InstallCustomization {
+  module_id: string;
+  custom_name?: string;
+  target_departments?: string[];
+  is_mandatory: boolean;
+  deadline?: string;
+  enable_assignments: boolean;
 }

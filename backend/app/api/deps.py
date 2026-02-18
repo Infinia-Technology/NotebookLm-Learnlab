@@ -68,6 +68,21 @@ async def require_super_admin(
     return current_user
 
 
+async def require_admin(
+    current_user: UserDocument = Depends(get_current_user)
+) -> UserDocument:
+    """
+    Dependency that requires the user to be an admin, super_admin, or editor.
+    """
+    allowed = ["super_admin", "admin", "editor"]
+    if current_user.role not in allowed:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Administrative access required"
+        )
+    return current_user
+
+
 def require_role(role: str) -> Callable:
     """
     Dependency factory that requires a specific system-level role.

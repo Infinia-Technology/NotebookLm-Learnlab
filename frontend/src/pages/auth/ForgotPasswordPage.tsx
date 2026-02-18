@@ -43,9 +43,10 @@ export function ForgotPasswordPage() {
       {/* Back button */}
       <Link
         to="/auth/login"
-        className="absolute left-10 top-10 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+        className="absolute left-10 top-10 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 rounded transition-colors"
       >
         <ArrowLeft className="w-5 h-5" />
+
       </Link>
 
       {/* Logo */}
@@ -65,15 +66,16 @@ export function ForgotPasswordPage() {
         <div className="w-10 h-10 bg-[var(--btn-primary-bg)] rounded-lg items-center justify-center hidden">
           <span className="text-white font-bold text-lg">{config.app.name.charAt(0)}</span>
         </div>
-        <span className="text-lg font-bold text-gray-800">{config.app.name}</span>
+        <span className="text-lg font-bold text-text-primary">{config.app.name}</span>
       </div>
 
-      <h1 className="text-2xl font-semibold text-gray-900 text-center mb-2">
-        Reset your password
+      <h1 className="text-2xl font-semibold text-text-primary text-center mb-2">
+        Reset password
       </h1>
-      <p className="text-sm text-gray-500 text-center mb-8">
-        Enter your email to receive a reset code
+      <p className="text-sm text-text-secondary text-center mb-8">
+        Enter your email address and we'll send you a link to reset your password.
       </p>
+
 
       <div className="space-y-6">
         <Input

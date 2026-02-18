@@ -94,7 +94,7 @@ export const otpSchema = z
 // USER ROLE & STATUS SCHEMAS
 // ============================================
 
-export const userRoleSchema = z.enum(['viewer', 'editor', 'admin', 'super_admin']);
+export const userRoleSchema = z.enum(['viewer', 'editor', 'admin', 'super_admin', 'user']);
 export const userStatusSchema = z.enum(['active', 'pending', 'suspended']);
 
 export type UserRole = z.infer<typeof userRoleSchema>;
@@ -191,7 +191,7 @@ export const updateUserSchema = z.object({
   last_name: z.string().optional(),
   department: z.string().optional(),
   phone_number: z.string().optional(),
-  role: z.enum(['viewer', 'editor', 'admin', 'super_admin', '']).optional(),
+  role: z.enum(['viewer', 'editor', 'admin', 'super_admin', 'user', '']).optional(),
   status: userStatusSchema,
   password: optionalPasswordSchema.optional(),
 });

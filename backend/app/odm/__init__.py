@@ -26,8 +26,10 @@ from app.odm.user import (
     EntityRoleStr,
     EntityRole,
     CompanyRole,
+    CompanyRole,
     EmbeddedGroupAssignment,
 )
+from app.odm.domain import DomainDocument
 
 # Backward-compatible aliases
 User = UserDocument
@@ -57,5 +59,9 @@ __all__ = [
     # Backward compatibility classes
     "EntityRole",
     "CompanyRole",
+    "CompanyRole",
     "EmbeddedGroupAssignment",
+    
+    # Domain
+    "DomainDocument",
 ]

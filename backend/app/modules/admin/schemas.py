@@ -6,7 +6,8 @@ from pydantic import BaseModel, EmailStr, Field
 
 
 # Role types
-SystemRoleType = Literal["super_admin", "admin", "editor", "viewer"]
+SystemRoleType = Literal["super_admin", "super_viewer", "admin", "editor", "viewer", "user"]
+
 UserStatusType = Literal["pending", "active", "suspended"]
 
 

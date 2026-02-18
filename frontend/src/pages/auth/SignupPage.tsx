@@ -76,13 +76,13 @@ export function SignupPage() {
         <div className="w-10 h-10 bg-[var(--btn-primary-bg)] rounded-lg items-center justify-center hidden">
           <span className="text-white font-bold text-lg">{config.app.name.charAt(0)}</span>
         </div>
-        <span className="text-lg font-bold text-gray-800">{config.app.name}</span>
+        <span className="text-lg font-bold text-text-primary">{config.app.name}</span>
       </div>
 
-      <h1 className="text-2xl font-semibold text-gray-900 text-center mb-2">
+      <h1 className="text-2xl font-semibold text-text-primary text-center mb-2">
         Create account
       </h1>
-      <p className="text-sm text-gray-500 text-center mb-8">
+      <p className="text-sm text-text-secondary text-center mb-8">
         to get started
       </p>
 
@@ -116,7 +116,7 @@ export function SignupPage() {
             error={emailError || undefined}
           />
           {emailError && emailError.includes("already registered") && (
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
               <Link to="/auth/forgot-password" className="text-[var(--btn-primary-bg)] hover:underline">
                 Forgot your password?
               </Link>
@@ -135,8 +135,8 @@ export function SignupPage() {
           />
 
           {showPasswordRules && (
-            <div className="mt-3 p-3 bg-gray-50 rounded border border-gray-200">
-              <p className="text-xs font-medium text-gray-600 mb-2">Password requirements:</p>
+            <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-700">
+              <p className="text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">Password requirements:</p>
               <div className="space-y-1">
                 <PasswordCheck passed={passwordValidation.checks.minLength} label="At least 8 characters" />
                 <PasswordCheck passed={passwordValidation.checks.hasUppercase} label="At least 1 uppercase letter (A-Z)" />
@@ -160,7 +160,7 @@ export function SignupPage() {
         </Button>
 
         <div className="text-center">
-          <span className="text-sm text-gray-500">Already have an account? </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">Already have an account? </span>
           <Link
             to="/auth/login"
             className="text-sm text-[var(--btn-primary-bg)] hover:underline"

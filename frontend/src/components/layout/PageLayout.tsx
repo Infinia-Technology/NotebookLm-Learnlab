@@ -67,21 +67,21 @@ export function PageLayout({
           {backTo && (
             <button
               onClick={handleBack}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               aria-label="Go back"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-600" />
+              <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             </button>
           )}
           {icon && (
-            <div className="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 bg-sky-100 dark:bg-sky-900/30 rounded-xl flex items-center justify-center flex-shrink-0 text-sky-600 dark:text-sky-400">
               {icon}
             </div>
           )}
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h1>
             {subtitle && (
-              <p className="text-gray-500 mt-1">{subtitle}</p>
+              <p className="text-gray-500 dark:text-gray-400 mt-1">{subtitle}</p>
             )}
           </div>
         </div>

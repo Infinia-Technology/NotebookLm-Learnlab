@@ -16,6 +16,7 @@ import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { HeaderBar } from './HeaderBar';
 import { useSystemConfig } from '../../hooks/useSystemConfig';
+import { AnimatedBackground } from '../ui/AnimatedBackground';
 
 const SIDEBAR_COLLAPSED_KEY = 'sidebar-collapsed';
 
@@ -51,7 +52,8 @@ export function AppShell({ variant = 'user' }: AppShellProps) {
   }, [sidebarCollapsed]);
 
   return (
-    <div className="flex h-screen bg-[#121212] overflow-hidden">
+    <div className="flex h-screen bg-white dark:bg-black overflow-hidden transition-colors duration-300 relative">
+      <AnimatedBackground />
       {/* Sidebar */}
       <Sidebar
         collapsed={sidebarCollapsed}
@@ -60,7 +62,7 @@ export function AppShell({ variant = 'user' }: AppShellProps) {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden min-w-0 rounded-l-2xl bg-gray-50">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0 rounded-l-2xl bg-white/40 dark:bg-black/40 backdrop-blur-md border-l border-gray-100 dark:border-gray-800 transition-colors duration-300 relative z-10">
         {/* Header with breadcrumbs and profile */}
         <HeaderBar variant={variant} />
 
@@ -72,11 +74,11 @@ export function AppShell({ variant = 'user' }: AppShellProps) {
         </main>
 
         {/* Footer */}
-        <footer className="bg-white border-t border-gray-100 py-3 px-6 rounded-bl-2xl">
+        <footer className="bg-white/40 dark:bg-[#141414]/40 border-t border-gray-100 dark:border-gray-800 py-3 px-6 rounded-bl-2xl backdrop-blur-md transition-colors duration-300">
           <div className="flex items-center justify-between text-xs text-gray-400 max-w-[1600px] mx-auto">
             <span className="flex items-center gap-1.5">
               <span>&copy; {new Date().getFullYear()}</span>
-              <span className="font-medium text-gray-500">{config.app.name}</span>
+              <span className="font-medium text-gray-500 dark:text-gray-400">{config.app.name}</span>
             </span>
             <span className="hidden sm:block">{config.app.description}</span>
           </div>

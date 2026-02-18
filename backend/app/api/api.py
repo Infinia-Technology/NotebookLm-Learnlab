@@ -12,8 +12,12 @@ from app.modules import (
     health_router,
     auth_router,
     admin_router,
+    admin_router,
     account_router,
+    quiz_router,
 )
+from app.modules.marketplace.router import router as marketplace_router
+from app.modules.learning.router import router as learning_router
 
 api_router = APIRouter()
 
@@ -48,5 +52,29 @@ api_router.include_router(
     account_router,
     prefix="/account",
     tags=["account"],
+    dependencies=auth_required
+)
+
+# Quiz - Quiz completion and scoring
+api_router.include_router(
+    quiz_router,
+    prefix="/quiz",
+    tags=["quiz"],
+    dependencies=auth_required
+)
+
+# Enterprise Marketplace - Module catalog and installation
+api_router.include_router(
+    marketplace_router,
+    prefix="/enterprise",
+    tags=["enterprise-marketplace"],
+    dependencies=auth_required
+)
+
+# Learning - Courses, Modules and Progress
+api_router.include_router(
+    learning_router,
+    prefix="/learning",
+    tags=["learning"],
     dependencies=auth_required
 )

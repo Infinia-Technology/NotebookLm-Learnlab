@@ -1,4 +1,4 @@
-# SAIL Starter Kit - Claude Code Instructions
+# EleVatria - Claude Code Instructions
 
 ## Project Overview
 

@@ -25,6 +25,8 @@ async def get_account(
         phone_number=current_user.phone_number,
         role=current_user.role,
         status=current_user.status,
+        created_at=current_user.created_at,
+        last_login_at=current_user.last_login_at,
     )
 
 
@@ -52,6 +54,8 @@ async def update_account(
         phone_number=user.phone_number,
         role=user.role,
         status=user.status,
+        created_at=user.created_at,
+        last_login_at=user.last_login_at,
     )
 
 

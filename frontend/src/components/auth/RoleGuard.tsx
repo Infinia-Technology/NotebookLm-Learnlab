@@ -8,6 +8,7 @@ interface RoleGuardProps {
    * Require user to be a super_admin
    */
   requireSuperAdmin?: boolean;
+  requireDomainAdmin?: boolean;
 
   /**
    * Content to render if authorized
@@ -42,6 +43,7 @@ interface RoleGuardProps {
  */
 export function RoleGuard({
   requireSuperAdmin,
+  requireDomainAdmin,
   children,
   fallback,
   redirectOnFail = false,
@@ -55,6 +57,15 @@ export function RoleGuard({
 
   // Check super_admin requirement
   if (requireSuperAdmin && !isSuperAdmin) {
+    if (redirectOnFail) {
+      return <Navigate to="/dashboard" replace />;
+    }
+    return fallback ? <>{fallback}</> : <AccessDenied />;
+  }
+
+  // Check domain_admin requirement
+  const { isDomainAdmin } = useAuth();
+  if (requireDomainAdmin && !isDomainAdmin) {
     if (redirectOnFail) {
       return <Navigate to="/dashboard" replace />;
     }

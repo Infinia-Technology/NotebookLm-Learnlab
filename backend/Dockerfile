@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir pip --upgrade && \
     pip install --no-cache-dir hatchling && \
     mkdir -p app && \
     touch app/__init__.py && \
-    pip install --no-cache-dir -e .
+    pip install --no-cache-dir -e ".[email]"
 
 # Copy application code
 COPY app/ app/

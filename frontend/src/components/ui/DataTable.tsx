@@ -147,7 +147,7 @@ export function DataTable<T extends object>({
   const renderSortIcon = (field: string) => {
     if (effectiveSortField !== field) {
       return (
-        <span className="ml-1 text-gray-300 group-hover:text-gray-400">
+        <span className="ml-1 text-gray-300 dark:text-gray-600 group-hover:text-gray-400 dark:group-hover:text-gray-500">
           <ChevronUp className="w-3 h-3 -mb-1" />
           <ChevronDown className="w-3 h-3 -mt-1" />
         </span>
@@ -211,8 +211,8 @@ export function DataTable<T extends object>({
               className={cn(
                 'min-w-[32px] h-8 px-2 rounded text-sm font-medium transition-colors',
                 page === p
-                  ? 'bg-primary-600 text-white'
-                  : 'hover:bg-gray-100 text-gray-700'
+                  ? 'bg-primary-600 dark:bg-primary-500 text-white'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
               )}
             >
               {p}
@@ -241,7 +241,7 @@ export function DataTable<T extends object>({
   };
 
   return (
-    <div className={cn('bg-white rounded-lg', className)}>
+    <div className={cn('bg-white dark:bg-gray-800 rounded-lg', className)}>
       {/* Header with search and actions */}
       {(searchable || exportable || headerActions) && (
         <div className="flex items-center justify-between gap-4 mb-4">
@@ -253,7 +253,7 @@ export function DataTable<T extends object>({
                 value={searchValue}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                className="w-full pl-10 pr-4 py-2 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
               />
             </div>
           ) : (
@@ -275,15 +275,15 @@ export function DataTable<T extends object>({
       )}
 
       {/* Table */}
-      <div className="overflow-x-auto border rounded-lg">
+      <div className="overflow-x-auto border dark:border-gray-700 rounded-lg">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b">
+          <thead className="bg-gray-50 dark:bg-gray-900/50 border-b dark:border-gray-700">
             <tr>
               {columns.map((col) => (
                 <th
                   key={col.key}
                   className={cn(
-                    'px-4 py-3 font-medium text-gray-600',
+                    'px-4 py-3 font-medium text-gray-600 dark:text-gray-400',
                     col.align === 'center' && 'text-center',
                     col.align === 'right' && 'text-right',
                     col.align !== 'center' && col.align !== 'right' && 'text-left',
@@ -306,7 +306,7 @@ export function DataTable<T extends object>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y">
+          <tbody className="divide-y dark:divide-gray-700">
             {loading ? (
               <tr>
                 <td colSpan={columns.length} className="px-4 py-12 text-center">
@@ -329,9 +329,9 @@ export function DataTable<T extends object>({
                     key={key}
                     onClick={onRowClick ? () => onRowClick(row) : undefined}
                     className={cn(
-                      'hover:bg-gray-50 transition-colors',
+                      'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors',
                       onRowClick && 'cursor-pointer',
-                      isSelected && 'bg-primary-50'
+                      isSelected && 'bg-primary-50 dark:bg-primary-900/20'
                     )}
                   >
                     {columns.map((col) => {
@@ -349,8 +349,8 @@ export function DataTable<T extends object>({
                           {col.render
                             ? col.render(value, row, rowIndex)
                             : value !== null && value !== undefined
-                            ? String(value)
-                            : '-'}
+                              ? String(value)
+                              : '-'}
                         </td>
                       );
                     })}
@@ -375,7 +375,7 @@ export function DataTable<T extends object>({
                 <select
                   value={pageSize}
                   onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                  className="px-2 py-1 border rounded focus:ring-2 focus:ring-primary-500"
+                  className="px-2 py-1 border dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500"
                 >
                   {pageSizeOptions.map((size) => (
                     <option key={size} value={size}>

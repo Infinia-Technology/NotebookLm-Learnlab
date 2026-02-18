@@ -1,4 +1,4 @@
-# SAIL Starter Kit Docker Compose
+# EleVatria Docker Compose
 #
 # Usage:
 #   docker compose up -d          # Start all services
@@ -29,7 +29,7 @@ services:
     volumes:
       - app_mongo_data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "-u", "${MONGO_USER:-app_admin}", "-p", "${MONGO_PASSWORD:-app_secure_pass}", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')"]
+      test: [ "CMD", "mongosh", "-u", "${MONGO_USER:-app_admin}", "-p", "${MONGO_PASSWORD:-app_secure_pass}", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,7 +41,7 @@ services:
     volumes:
       - app_redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -68,6 +68,8 @@ services:
       app-redis:
         condition: service_healthy
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
     restart: unless-stopped
 
   app-frontend:

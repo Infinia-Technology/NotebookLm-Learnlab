@@ -28,17 +28,26 @@ Configuration (via environment variables):
 from .service import (
     send_email,
     send_otp_email,
+    send_welcome_email,
+    send_quiz_completion_email,
+    send_certification_email,
     send_invitation_email,
     get_email_provider,
     EMAIL_FROM,
     EMAIL_FROM_NAME,
+    send_duplicate_account_email,
+    send_enrollment_email,
 )
 
 __all__ = [
     "send_email",
     "send_otp_email",
+    "send_welcome_email",
+    "send_quiz_completion_email",
+    "send_certification_email",
     "send_invitation_email",
     "get_email_provider",
     "EMAIL_FROM",
     "EMAIL_FROM_NAME",
+    "send_enrollment_email",
 ]

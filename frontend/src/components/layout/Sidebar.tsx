@@ -6,6 +6,9 @@ import {
   ShieldCheck,
   PanelLeftClose,
   PanelLeft,
+  Package,
+  Layers,
+  BarChart3,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useSystemConfig } from '../../hooks/useSystemConfig';
@@ -26,25 +29,30 @@ export interface SidebarProps {
 // Default navigation items
 const userNavigation: NavItem[] = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, end: true },
+  { name: 'Modules', href: '/dashboard/modules', icon: Package },
+  { name: 'Certifications', href: '/dashboard/certifications', icon: ShieldCheck },
   { name: 'Account', href: '/dashboard/account', icon: Settings },
 ];
 
 const adminNavigation: NavItem[] = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, end: true },
+  { name: 'Marketplace', href: '/admin/marketplace', icon: Package },
+  { name: 'Module Builder', href: '/admin/module-builder', icon: Layers },
+  { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'User Management', href: '/admin/users', icon: Users },
 ];
 
 // Accent colors for each variant
 const variantStyles = {
   user: {
-    activeIcon: 'text-sky-400',
-    activeBg: 'bg-gray-700/50',
-    labelColor: 'text-sky-400',
+    activeIcon: 'text-sky-600 dark:text-sky-400',
+    activeBg: 'bg-sky-50 dark:bg-gray-800/50',
+    labelColor: 'text-sky-600 dark:text-sky-400',
   },
   admin: {
-    activeIcon: 'text-purple-400',
-    activeBg: 'bg-gray-700/50',
-    labelColor: 'text-purple-400',
+    activeIcon: 'text-purple-600 dark:text-purple-400',
+    activeBg: 'bg-purple-50 dark:bg-gray-800/50',
+    labelColor: 'text-purple-600 dark:text-purple-400',
   },
 };
 
@@ -57,8 +65,8 @@ export function Sidebar({ collapsed = false, onToggle, variant = 'user' }: Sideb
   return (
     <div
       className={cn(
-        'flex flex-col h-full flex-shrink-0 transition-all duration-200',
-        'bg-[#1c1c1c]',
+        'flex flex-col h-full flex-shrink-0 transition-all duration-300 relative z-20',
+        'bg-white/60 dark:bg-black/60 border-r border-gray-100 dark:border-gray-800 backdrop-blur-md',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
@@ -75,7 +83,7 @@ export function Sidebar({ collapsed = false, onToggle, variant = 'user' }: Sideb
               className="h-7 w-auto"
               style={{ filter: 'brightness(0) invert(1)' }}
             />
-            <span className="font-bold text-white text-lg">
+            <span className="font-bold text-gray-900 dark:text-white text-lg">
               {config.app.name}
             </span>
           </div>
@@ -90,7 +98,7 @@ export function Sidebar({ collapsed = false, onToggle, variant = 'user' }: Sideb
         {!collapsed && (
           <button
             onClick={onToggle}
-            className="p-2 rounded-xl text-gray-500 hover:text-white hover:bg-gray-700/50 transition-colors"
+            className="p-2 rounded-xl text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             title="Collapse sidebar"
           >
             <PanelLeftClose className="w-5 h-5" />
@@ -128,8 +136,8 @@ export function Sidebar({ collapsed = false, onToggle, variant = 'user' }: Sideb
                 'flex items-center text-sm font-medium rounded-xl transition-all duration-150',
                 collapsed ? 'justify-center p-3' : 'px-3 py-2.5',
                 isActive
-                  ? `${styles.activeBg} text-white`
-                  : 'text-gray-400 hover:bg-gray-700/30 hover:text-white'
+                  ? `${styles.activeBg} text-gray-900 dark:text-white`
+                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/30 hover:text-gray-900 dark:hover:text-white'
               )
             }
           >
@@ -152,7 +160,7 @@ export function Sidebar({ collapsed = false, onToggle, variant = 'user' }: Sideb
         <div className="p-2 pb-4">
           <button
             onClick={onToggle}
-            className="w-full p-3 rounded-xl text-gray-500 hover:text-white hover:bg-gray-700/50 transition-colors flex justify-center"
+            className="w-full p-3 rounded-xl text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex justify-center"
             title="Expand sidebar"
           >
             <PanelLeft className="w-5 h-5" />

@@ -88,26 +88,7 @@
   box-sizing: border-box;
 }
 
-/* Dark mode support for ChatGPT theme */
-.dark {
-  --gpt-bg: var(--color-gpt-dark-bg);
-  --gpt-bg-secondary: var(--color-gpt-dark-bg-secondary);
-  --gpt-sidebar: var(--color-gpt-dark-sidebar);
-  --gpt-message-bg: var(--color-gpt-dark-message-bg);
-  --gpt-message-text: var(--color-gpt-dark-message-text);
-  --gpt-message-user-bg: var(--color-gpt-dark-message-user-bg);
-  --gpt-message-user-text: var(--color-gpt-dark-message-user-text);
-  --gpt-border: var(--color-gpt-dark-border);
-  --gpt-border-light: var(--color-gpt-dark-border-light);
-  --gpt-text-primary: var(--color-gpt-dark-text-primary);
-  --gpt-text-secondary: var(--color-gpt-dark-text-secondary);
-  --gpt-icon: var(--color-gpt-dark-icon);
-  --gpt-hover: var(--color-gpt-dark-hover);
-  --gpt-input-bg: var(--color-gpt-dark-input-bg);
-  --gpt-input-border: var(--color-gpt-dark-input-border);
-  --gpt-button-primary: var(--color-gpt-dark-button-primary);
-  --gpt-button-hover: var(--color-gpt-dark-button-hover);
-}
+@variant dark (&:where(.dark, .dark *));
 
 :root {
   --gpt-bg: var(--color-gpt-bg);
@@ -127,25 +108,63 @@
   --gpt-input-border: var(--color-gpt-input-border);
   --gpt-button-primary: var(--color-gpt-button-primary);
   --gpt-button-hover: var(--color-gpt-button-hover);
+  color-scheme: light;
+}
+
+/* Dark mode support for ChatGPT theme */
+.dark {
+  --gpt-bg: var(--color-gpt-dark-bg);
+  --gpt-bg-secondary: var(--color-gpt-dark-bg-secondary);
+  --gpt-sidebar: var(--color-gpt-dark-sidebar);
+  --gpt-message-bg: var(--color-gpt-dark-message-bg);
+  --gpt-message-text: var(--color-gpt-dark-message-text);
+  --gpt-message-user-bg: var(--color-gpt-dark-message-user-bg);
+  --gpt-message-user-text: var(--color-gpt-dark-message-user-text);
+  --gpt-border: var(--color-gpt-dark-border);
+  --gpt-border-light: var(--color-gpt-dark-border-light);
+  --gpt-text-primary: var(--color-gpt-dark-text-primary);
+  --gpt-text-secondary: var(--color-gpt-dark-text-secondary);
+  --gpt-icon: var(--color-gpt-dark-icon);
+  --gpt-hover: var(--color-gpt-dark-hover);
+  --gpt-input-bg: var(--color-gpt-dark-input-bg);
+  --gpt-input-border: var(--color-gpt-dark-input-border);
+  --gpt-button-primary: var(--color-gpt-dark-button-primary);
+  --gpt-button-hover: var(--color-gpt-dark-button-hover);
+  color-scheme: dark;
 }
 
 /* Apply background colors globally */
-html, body, #root {
+html,
+body,
+#root {
   background-color: var(--gpt-bg);
   color: var(--gpt-text-primary);
-  transition: background-color 0.2s ease, color 0.2s ease;
   min-height: 100vh;
 }
 
-/* Smooth theme transitions */
+/* View Transitions API support for ultra-smooth theme switching */
+@supports (view-transition-name: root) {
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Optimized smooth theme transitions - faster and more responsive */
 * {
-  transition-property: background-color, border-color, color;
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
   transition-duration: 0.2s;
-  transition-timing-function: ease;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Faster transitions for interactive elements */
-input, textarea, select, button {
+input,
+textarea,
+select,
+button,
+a {
   transition-duration: 0.15s;
 }
 
@@ -154,28 +173,61 @@ input, textarea, select, button {
    ============================================ */
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slide-up {
-  from { transform: translateY(8px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slide-down {
-  from { transform: translateY(-8px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slide-in-left {
-  from { transform: translateX(-16px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(-16px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slide-in-right {
-  from { transform: translateX(16px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes message-in {
@@ -183,6 +235,7 @@ input, textarea, select, button {
     opacity: 0;
     transform: translateY(10px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -190,24 +243,54 @@ input, textarea, select, button {
 }
 
 @keyframes pulse-soft {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes bounce-in {
-  0% { transform: scale(0.9); opacity: 0; }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes typing-cursor {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes message-appear {
@@ -215,6 +298,7 @@ input, textarea, select, button {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -226,6 +310,7 @@ input, textarea, select, button {
     opacity: 0;
     transform: translateX(20px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateX(0) scale(1);
@@ -236,9 +321,11 @@ input, textarea, select, button {
   0% {
     opacity: 0.8;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 1;
   }
@@ -248,6 +335,7 @@ input, textarea, select, button {
   from {
     opacity: 0.4;
   }
+
   to {
     opacity: 1;
   }
@@ -284,7 +372,7 @@ input, textarea, select, button {
 
 .animate-shimmer {
   animation: shimmer 1.5s infinite;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
   background-size: 200% 100%;
 }
 
@@ -313,7 +401,7 @@ input, textarea, select, button {
   position: relative;
 }
 
-.streaming-content .markdown-content > *:last-child {
+.streaming-content .markdown-content>*:last-child {
   animation: content-fade-in 0.15s ease-out;
 }
 
@@ -323,12 +411,10 @@ input, textarea, select, button {
 .streaming-content .markdown-content h1:last-of-type,
 .streaming-content .markdown-content h2:last-of-type,
 .streaming-content .markdown-content h3:last-of-type {
-  background: linear-gradient(
-    90deg,
-    var(--gpt-text-primary) 0%,
-    var(--gpt-text-primary) 70%,
-    color-mix(in srgb, var(--gpt-text-primary) 50%, transparent) 100%
-  );
+  background: linear-gradient(90deg,
+      var(--gpt-text-primary) 0%,
+      var(--gpt-text-primary) 70%,
+      color-mix(in srgb, var(--gpt-text-primary) 50%, transparent) 100%);
   background-clip: text;
   -webkit-background-clip: text;
 }

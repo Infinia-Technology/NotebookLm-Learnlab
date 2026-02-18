@@ -15,8 +15,8 @@ from app.odm.document import Document, PyObjectId
 
 
 # Role and status enums as string literals
-SystemRoleStr = Literal["super_admin", "super_viewer"]  # System-wide roles
-RoleStr = Literal["admin", "editor", "viewer"]  # Company-level roles
+SystemRoleStr = Literal["super_admin", "super_viewer", "admin", "editor", "viewer", "user"]  # System-wide roles
+RoleStr = Literal["admin", "editor", "viewer", "user"]  # Company-level roles
 DomainRoleStr = Literal["admin", "member"]  # Per-domain roles
 UserStatusStr = Literal["pending", "active", "suspended"]
 
@@ -91,6 +91,7 @@ class UserDocument(Document):
 
     # Domain assignment (multi-tenant)
     domain_id: Optional[PyObjectId] = None
+    domain_uuid: Optional[str] = None
     domain_role: Optional[DomainRoleStr] = None
 
     # OTP
@@ -109,6 +110,7 @@ class UserDocument(Document):
 
     # Linked agent profile (My Profile feature)
     linked_agent_id: Optional[str] = None
+    linked_agent_uuid: Optional[str] = None
 
     # ==================== Class Methods ====================
 

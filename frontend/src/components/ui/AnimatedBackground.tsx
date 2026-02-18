@@ -1,53 +1,40 @@
-// Animation styles for gradient orbs
-const animationStyles = `
-  @keyframes pulse-glow {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.05); }
-  }
-  .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
-`;
-
 export function AnimatedBackground() {
   return (
-    <>
-      {/* Inject animation styles */}
-      <style>{animationStyles}</style>
+    <div className="fixed inset-0 pointer-events-none overflow-hidden transition-colors duration-500 text-slate-200 dark:text-slate-800">
+      {/* Base Layer - Theme specific Background */}
+      <div className="absolute inset-0 bg-white dark:bg-black transition-colors duration-500" />
 
-      {/* Gradient mesh background */}
-      <div className="fixed inset-0 pointer-events-none">
-        {/* Primary gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+      {/* Corporate Grid Overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.4] dark:opacity-[0.1]"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, currentColor 1px, transparent 1px),
+            linear-gradient(to bottom, currentColor 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+        }}
+      />
 
-        {/* Animated gradient orbs */}
-        <div
-          className="absolute top-0 -left-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl animate-pulse-glow"
-          style={{ animationDelay: '0s' }}
-        />
-        <div
-          className="absolute top-1/4 right-0 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl animate-pulse-glow"
-          style={{ animationDelay: '1s' }}
-        />
-        <div
-          className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-purple-600/15 rounded-full blur-3xl animate-pulse-glow"
-          style={{ animationDelay: '2s' }}
-        />
-        <div
-          className="absolute bottom-0 right-1/3 w-64 h-64 bg-blue-500/15 rounded-full blur-3xl animate-pulse-glow"
-          style={{ animationDelay: '3s' }}
-        />
+      {/* Mesh Gradients - Corporate Colors */}
+      <div className="absolute inset-0">
+        {/* Top Right - Cyan/Blue - More visible in light mode */}
+        <div className="absolute -top-[10%] -right-[10%] w-[60%] h-[60%] rounded-full bg-cyan-200/40 dark:bg-cyan-900/20 blur-[140px] animate-pulse" style={{ animationDuration: '8s' }} />
 
-        {/* Grid pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-          }}
-        />
+        {/* Bottom Left - Indigo/Purple - More visible in light mode */}
+        <div className="absolute -bottom-[10%] -left-[10%] w-[60%] h-[60%] rounded-full bg-indigo-200/40 dark:bg-indigo-900/20 blur-[140px] animate-pulse" style={{ animationDuration: '10s' }} />
       </div>
-    </>
+
+      {/* Architectural Technical Lines - Stronger in light mode */}
+      <div className="absolute inset-0 opacity-[0.2] dark:opacity-[0.3]">
+        <div className="absolute top-[20%] left-0 w-full h-[1px] bg-current" />
+        <div className="absolute top-[60%] left-0 w-full h-[1px] bg-current" />
+        <div className="absolute left-[30%] top-0 h-full w-[1px] bg-current" />
+        <div className="absolute left-[70%] top-0 h-full w-[1px] bg-current" />
+      </div>
+
+      {/* Radial Mask - Fade edges */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.2)_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.6)_100%)]" />
+    </div>
   );
 }

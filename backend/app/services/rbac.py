@@ -17,6 +17,7 @@ ROLE_LEVELS = {
     "admin": 80,
     "editor": 60,
     "viewer": 20,
+    "user": 10,
 }
 
 

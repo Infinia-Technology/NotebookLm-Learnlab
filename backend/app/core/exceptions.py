@@ -6,6 +6,8 @@ standardized error codes and response format.
 """
 
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from loguru import logger
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError as PydanticValidationError
 
@@ -150,6 +152,27 @@ def register_exception_handlers(app: FastAPI):
                 "error": {
                     "code": ErrorCode.VALIDATION_ERROR.value,
                     "message": message,
+                },
+            },
+        )
+
+    @app.exception_handler(RequestValidationError)
+    async def request_validation_exception_handler(
+        request: Request, exc: RequestValidationError
+    ):
+        """Handle FastAPI request validation errors."""
+        body = await request.body()
+        logger.error(f"Request validation error for {request.url}")
+        logger.error(f"Detail: {exc.errors()}")
+        logger.error(f"Body: {body.decode()}")
+
+        return JSONResponse(
+            status_code=422,
+            content={
+                "success": False,
+                "error": {
+                    "code": ErrorCode.VALIDATION_ERROR.value,
+                    "message": str(exc.errors()),
                 },
             },
         )

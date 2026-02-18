@@ -21,6 +21,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/Button';
+import { ThemeToggle } from '../common';
 
 export interface HeaderBarProps {
   variant?: 'user' | 'admin';
@@ -60,28 +61,28 @@ const userDynamicBreadcrumbs: Array<{
   pattern: RegExp;
   getBreadcrumbs: (match: RegExpMatchArray) => BreadcrumbItem[];
 }> = [
-  {
-    pattern: /^\/dashboard\/([^/]+)$/,
-    getBreadcrumbs: (match) => [
-      { label: 'Dashboard', href: '/dashboard' },
-      { label: match[1].charAt(0).toUpperCase() + match[1].slice(1).replace(/-/g, ' ') },
-    ],
-  },
-];
+    {
+      pattern: /^\/dashboard\/([^/]+)$/,
+      getBreadcrumbs: (match) => [
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: match[1].charAt(0).toUpperCase() + match[1].slice(1).replace(/-/g, ' ') },
+      ],
+    },
+  ];
 
 const adminDynamicBreadcrumbs: Array<{
   pattern: RegExp;
   getBreadcrumbs: (match: RegExpMatchArray) => BreadcrumbItem[];
 }> = [
-  {
-    pattern: /^\/admin\/users\/([^/]+)$/,
-    getBreadcrumbs: () => [
-      { label: 'Admin', href: '/admin' },
-      { label: 'Users', href: '/admin/users' },
-      { label: 'Edit User' },
-    ],
-  },
-];
+    {
+      pattern: /^\/admin\/users\/([^/]+)$/,
+      getBreadcrumbs: () => [
+        { label: 'Admin', href: '/admin' },
+        { label: 'Users', href: '/admin/users' },
+        { label: 'Edit User' },
+      ],
+    },
+  ];
 
 function getBreadcrumbs(pathname: string, variant: 'user' | 'admin'): BreadcrumbItem[] {
   const staticRoutes = variant === 'admin' ? adminRouteBreadcrumbs : userRouteBreadcrumbs;
@@ -147,14 +148,14 @@ export function HeaderBar({ variant = 'user' }: HeaderBarProps) {
     : 'from-[var(--btn-primary-bg)] to-sky-400';
 
   return (
-    <header className="bg-white border-b border-gray-100 sticky top-0 z-10 rounded-tl-2xl">
+    <header className="bg-white/40 dark:bg-[#141414]/40 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-10 rounded-tl-2xl backdrop-blur-md transition-colors duration-300">
       <div className="flex items-center justify-between h-14 px-6">
         {/* Breadcrumbs */}
         <nav className="flex items-center space-x-1 text-sm">
           <Link
             to={homeHref}
             className={cn(
-              'transition-colors p-1 rounded-md hover:bg-gray-50',
+              'transition-all duration-200 p-1 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800',
               isAdmin
                 ? 'text-purple-500 hover:text-purple-700'
                 : 'text-gray-400 hover:text-[var(--btn-primary-bg)]'
@@ -164,16 +165,16 @@ export function HeaderBar({ variant = 'user' }: HeaderBarProps) {
           </Link>
           {breadcrumbs.map((crumb, index) => (
             <div key={index} className="flex items-center">
-              <ChevronRight className="w-4 h-4 text-gray-300 mx-0.5" />
+              <ChevronRight className="w-4 h-4 text-gray-300 dark:text-gray-600 mx-0.5" />
               {crumb.href && index < breadcrumbs.length - 1 ? (
                 <Link
                   to={crumb.href}
-                  className="text-gray-500 hover:text-gray-700 transition-colors px-1.5 py-0.5 rounded-md hover:bg-gray-50"
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors px-1.5 py-0.5 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   {crumb.label}
                 </Link>
               ) : (
-                <span className="text-gray-900 font-medium px-1.5 py-0.5">{crumb.label}</span>
+                <span className="text-gray-900 dark:text-gray-100 font-medium px-1.5 py-0.5">{crumb.label}</span>
               )}
             </div>
           ))}
@@ -181,12 +182,15 @@ export function HeaderBar({ variant = 'user' }: HeaderBarProps) {
 
         {/* Right side: View Switcher + Profile */}
         <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+
           {/* View Switcher - Only for super_admin */}
           {isSuperAdmin && (
             isAdmin ? (
               <Link
                 to="/dashboard"
-                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 <ArrowLeftRight className="w-4 h-4" />
                 <span className="hidden sm:inline">User View</span>
@@ -210,7 +214,7 @@ export function HeaderBar({ variant = 'user' }: HeaderBarProps) {
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className={cn(
                 'flex items-center gap-2 px-2 py-1.5 rounded-lg transition-all duration-200',
-                dropdownOpen ? 'bg-gray-100' : 'hover:bg-gray-50'
+                dropdownOpen ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800'
               )}
             >
               <div className={cn(
@@ -219,7 +223,7 @@ export function HeaderBar({ variant = 'user' }: HeaderBarProps) {
               )}>
                 <span className="text-white text-xs font-semibold">{initials}</span>
               </div>
-              <span className="text-sm font-medium text-gray-700 hidden sm:block max-w-[120px] truncate">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-200 hidden sm:block max-w-[120px] truncate">
                 {displayName}
               </span>
               <ChevronDown
@@ -232,17 +236,17 @@ export function HeaderBar({ variant = 'user' }: HeaderBarProps) {
 
             {/* Dropdown Menu */}
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-[#1c1c1c] rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 {/* User Info */}
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-semibold text-gray-900">{displayName}</p>
-                  <p className="text-xs text-gray-500 truncate mt-0.5">{user?.email}</p>
+                <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{displayName}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{user?.email}</p>
                   {user?.role && (
                     <span className={cn(
                       'inline-flex items-center mt-2 px-2 py-0.5 text-xs font-medium rounded-full capitalize',
                       isAdmin
-                        ? 'bg-purple-100 text-purple-700'
-                        : 'bg-sky-50 text-sky-700'
+                        ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+                        : 'bg-sky-50 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400'
                     )}>
                       {user.role.replace('_', ' ')}
                     </span>
@@ -254,7 +258,7 @@ export function HeaderBar({ variant = 'user' }: HeaderBarProps) {
                   <Link
                     to="/dashboard/account"
                     onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                   >
                     <Settings className="w-4 h-4 text-gray-400" />
                     Account Settings
@@ -262,12 +266,12 @@ export function HeaderBar({ variant = 'user' }: HeaderBarProps) {
                 </div>
 
                 {/* Logout */}
-                <div className="border-t border-gray-100 pt-1.5">
+                <div className="border-t border-gray-100 dark:border-gray-800 pt-1.5">
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handleLogout}
-                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 justify-start rounded-none"
+                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 justify-start rounded-none transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
                     Sign Out

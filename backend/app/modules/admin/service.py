@@ -18,6 +18,7 @@ from app.modules.admin.schemas import (
     UserListResponse,
     AdminStatsResponse,
 )
+from app.services.email.service import send_admin_created_user_email
 
 
 def hash_password(password: str) -> str:
@@ -136,6 +137,13 @@ class AdminService:
                 code=ErrorCode.EMAIL_ALREADY_EXISTS
             )
 
+        # Send welcome email to user with their credentials
+        await send_admin_created_user_email(
+            email=user.email,
+            password=data.password,
+            first_name=user.first_name
+        )
+
         return user_to_response(user)
 
     async def update_user(
@@ -174,7 +182,7 @@ class AdminService:
         return user_to_response(user)
 
     async def delete_user(self, user_uuid: str) -> None:
-        """Delete (suspend) a user."""
+        """Permanently delete a user from the database."""
         user = await UserDocument.find_by_uuid(user_uuid)
         if not user:
             raise NotFoundError(
@@ -182,8 +190,8 @@ class AdminService:
                 code=ErrorCode.USER_NOT_FOUND
             )
 
-        user.status = "suspended"
-        await user.save()
+        # Permanently delete the user from database
+        await self.db.users.delete_one({"uuid": user_uuid})
 
     async def get_stats(self) -> AdminStatsResponse:
         """Get admin dashboard statistics."""

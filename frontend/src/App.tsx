@@ -20,9 +20,15 @@ import {
 import { UsersPage } from './pages/admin/Users';
 import { CreateUserPage } from './pages/admin/CreateUser';
 import { EditUserPage } from './pages/admin/EditUser';
+import { ModulesPage } from './pages/admin/Modules';
+import { MarketplacePage } from './pages/admin/Marketplace';
+import { CoursePlayer } from './pages/course/CoursePlayer';
+import { CertificationsPage } from './pages/course/Certifications';
 import DashboardAdmin from './pages/admin/DashboardAdmin';
 import Dashboard from './pages/Dashboard';
 import AccountSettings from './pages/AccountSettings';
+import { ModuleBuilderPage } from './pages/admin/ModuleBuilder';
+import { AnalyticsPage } from './pages/admin/Analytics';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -69,6 +75,9 @@ function AppRoutes() {
         }
       >
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/modules" element={<ModulesPage />} />
+        <Route path="/dashboard/modules/:courseId" element={<CoursePlayer />} />
+        <Route path="/dashboard/certifications" element={<CertificationsPage />} />
         <Route path="/dashboard/account" element={<AccountSettings />} />
       </Route>
 
@@ -76,13 +85,16 @@ function AppRoutes() {
       <Route
         element={
           <ProtectedRoute>
-            <RoleGuard requireSuperAdmin redirectOnFail>
+            <RoleGuard requireDomainAdmin redirectOnFail>
               <AppShell variant="admin" />
             </RoleGuard>
           </ProtectedRoute>
         }
       >
         <Route path="/admin" element={<DashboardAdmin />} />
+        <Route path="/admin/marketplace" element={<MarketplacePage />} />
+        <Route path="/admin/module-builder" element={<ModuleBuilderPage />} />
+        <Route path="/admin/analytics" element={<AnalyticsPage />} />
         <Route path="/admin/users" element={<UsersPage />} />
         <Route path="/admin/users/create" element={<CreateUserPage />} />
         <Route path="/admin/users/:userId" element={<EditUserPage />} />

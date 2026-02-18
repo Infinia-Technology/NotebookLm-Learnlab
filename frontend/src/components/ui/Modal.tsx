@@ -79,22 +79,22 @@ export function Modal({
       <div
         ref={contentRef}
         className={cn(
-          'w-full bg-white rounded-xl shadow-xl animate-slide-up',
+          'w-full bg-white dark:bg-gray-900 border dark:border-gray-800 rounded-xl shadow-xl animate-slide-up',
           sizeStyles[size],
           className
         )}
       >
         {/* Header */}
         {(title || description) && (
-          <div className="flex items-start justify-between p-6 border-b border-gray-100">
+          <div className="flex items-start justify-between p-6 border-b border-gray-100 dark:border-gray-800">
             <div>
               {title && (
-                <h2 id="modal-title" className="text-lg font-semibold text-gray-900">
+                <h2 id="modal-title" className="text-lg font-semibold text-gray-900 dark:text-white">
                   {title}
                 </h2>
               )}
               {description && (
-                <p id="modal-description" className="mt-1 text-sm text-gray-500">
+                <p id="modal-description" className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   {description}
                 </p>
               )}

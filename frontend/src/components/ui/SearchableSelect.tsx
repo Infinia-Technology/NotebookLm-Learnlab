@@ -136,12 +136,12 @@ export function SearchableSelect({
         disabled={disabled}
         className={cn(
           'w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl border text-sm transition-colors',
-          'bg-white border-slate-200 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500',
+          'bg-white dark:bg-gray-800 border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500',
           disabled && 'opacity-50 cursor-not-allowed',
-          isOpen && 'ring-2 ring-blue-500 border-blue-500'
+          isOpen && 'ring-2 ring-blue-500 border-blue-500 dark:border-blue-400'
         )}
       >
-        <span className={cn('truncate', !selectedOption && 'text-slate-400')}>
+        <span className={cn('truncate', !selectedOption && 'text-slate-400 dark:text-gray-500')}>
           {selectedOption?.label || placeholder}
         </span>
         <div className="flex items-center gap-1">
@@ -164,7 +164,7 @@ export function SearchableSelect({
       {isOpen && createPortal(
         <div
           ref={dropdownRef}
-          className="fixed z-[9999] bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+          className="fixed z-[9999] bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-xl shadow-lg overflow-hidden"
           style={{
             top: dropdownPosition.top,
             left: dropdownPosition.left,
@@ -172,9 +172,9 @@ export function SearchableSelect({
           }}
         >
           {/* Search Input */}
-          <div className="p-2 border-b border-slate-100">
+          <div className="p-2 border-b border-slate-100 dark:border-gray-800">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-gray-500" />
               <input
                 ref={inputRef}
                 type="text"
@@ -182,7 +182,7 @@ export function SearchableSelect({
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={searchPlaceholder}
-                className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
               />
             </div>
           </div>
@@ -202,15 +202,15 @@ export function SearchableSelect({
                   disabled={option.disabled}
                   className={cn(
                     'w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors',
-                    index === highlightedIndex && 'bg-slate-50',
-                    option.value === value && 'bg-blue-50 text-blue-700',
+                    index === highlightedIndex && 'bg-slate-50 dark:bg-gray-800',
+                    option.value === value && 'bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',
                     option.disabled && 'opacity-50 cursor-not-allowed',
-                    !option.disabled && 'hover:bg-slate-50'
+                    !option.disabled && (index !== highlightedIndex && option.value !== value) && 'text-gray-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-800'
                   )}
                 >
                   <span className="truncate">{option.label}</span>
                   {option.value === value && (
-                    <Check className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                    <Check className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                   )}
                 </button>
               ))

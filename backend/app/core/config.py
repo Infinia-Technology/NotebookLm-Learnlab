@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     # ==========================================================================
     # Application Settings
     # ==========================================================================
-    APP_NAME: str = "SAIL Starter Kit"
+    APP_NAME: str = "EleVatria"
     DEBUG: bool = False
 
     # ==========================================================================
@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     # ==========================================================================
     # Admin User - For initial setup
     # ==========================================================================
-    ADMIN_EMAIL: str = "admin@example.com"
+    ADMIN_EMAIL: str = "rsanutopthree@gmail.com"
     ADMIN_PASSWORD: str = ""  # Required for admin user creation
 
     # ==========================================================================
@@ -65,7 +65,9 @@ class Settings(BaseSettings):
     # Provider: console (dev), smtp, or resend
     EMAIL_PROVIDER: str = "console"
     EMAIL_FROM: str = "noreply@example.com"
-    EMAIL_FROM_NAME: str = "SAIL Starter Kit"
+    EMAIL_FROM_NAME: str = "EleVatria"
+    # Allow all domains (including disposable/test domains)
+    ALLOW_ALL_EMAIL_DOMAINS: bool = True
 
     # SMTP settings (when EMAIL_PROVIDER=smtp)
     SMTP_HOST: str = ""
@@ -77,6 +79,7 @@ class Settings(BaseSettings):
 
     # Resend settings (when EMAIL_PROVIDER=resend)
     RESEND_API_KEY: str = ""
+
 
     @property
     def cors_origins_list(self) -> list[str]:

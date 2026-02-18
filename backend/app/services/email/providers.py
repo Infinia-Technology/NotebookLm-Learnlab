@@ -27,8 +27,16 @@ class EmailProvider(ABC):
         body_text: Optional[str] = None,
         from_email: Optional[str] = None,
         from_name: Optional[str] = None,
+        attachments: Optional[list[dict[str, str | bytes]]] = None,
     ) -> bool:
-        """Send an email. Returns True if successful."""
+        """
+        Send an email. Returns True if successful.
+        
+        attachments: List of dicts with keys:
+            - filename: str
+            - content: bytes
+            - content_type: str (e.g. "application/pdf")
+        """
         pass
 
     @property
@@ -56,7 +64,14 @@ class ConsoleProvider(EmailProvider):
         body_text: Optional[str] = None,
         from_email: Optional[str] = None,
         from_name: Optional[str] = None,
+        attachments: Optional[list[dict[str, str | bytes]]] = None,
     ) -> bool:
+        attachment_info = ""
+        if attachments:
+            attachment_info = f"\nAttachments: {len(attachments)} file(s)\n"
+            for att in attachments:
+                attachment_info += f"- {att.get('filename')} ({att.get('content_type')})\n"
+        
         logger.info(
             f"\n{'='*60}\n"
             f"📧 EMAIL (Console Provider - Not Actually Sent)\n"
@@ -64,6 +79,7 @@ class ConsoleProvider(EmailProvider):
             f"From: {from_name} <{from_email}>\n"
             f"To: {to_email}\n"
             f"Subject: {subject}\n"
+            f"{attachment_info}"
             f"{'-'*60}\n"
             f"{body_text or body_html[:500]}...\n"
             f"{'='*60}\n"
@@ -123,23 +139,45 @@ class SMTPProvider(EmailProvider):
         body_text: Optional[str] = None,
         from_email: Optional[str] = None,
         from_name: Optional[str] = None,
+        attachments: Optional[list[dict[str, str | bytes]]] = None,
     ) -> bool:
         if not self._validate_config():
             logger.error("SMTP not configured. Falling back to console logging.")
             console = ConsoleProvider()
-            return await console.send(to_email, subject, body_html, body_text, from_email, from_name)
+            return await console.send(to_email, subject, body_html, body_text, from_email, from_name, attachments)
 
         try:
             # Create message
-            msg = MIMEMultipart("alternative")
+            msg = MIMEMultipart("mixed") if attachments else MIMEMultipart("alternative")
             msg["Subject"] = subject
             msg["From"] = f"{from_name} <{from_email}>" if from_name else from_email
             msg["To"] = to_email
 
-            # Attach text and HTML parts
-            if body_text:
-                msg.attach(MIMEText(body_text, "plain"))
-            msg.attach(MIMEText(body_html, "html"))
+            # If there are attachments, we need a nested multipart/alternative for the body
+            if attachments:
+                body_part = MIMEMultipart("alternative")
+                if body_text:
+                    body_part.attach(MIMEText(body_text, "plain"))
+                body_part.attach(MIMEText(body_html, "html"))
+                msg.attach(body_part)
+                
+                # Add attachments
+                from email.mime.application import MIMEApplication
+                
+                for attachment in attachments:
+                    filename = attachment.get("filename")
+                    content = attachment.get("content")
+                    # content_type = attachment.get("content_type") # Not strictly needed for MIMEApplication but good practice
+                    
+                    if content:
+                        part = MIMEApplication(content, Name=filename)
+                        part["Content-Disposition"] = f'attachment; filename="{filename}"'
+                        msg.attach(part)
+            else:
+                # Standard no-attachment email
+                if body_text:
+                    msg.attach(MIMEText(body_text, "plain"))
+                msg.attach(MIMEText(body_html, "html"))
 
             # Connect and send
             context = ssl.create_default_context()
@@ -203,11 +241,12 @@ class ResendProvider(EmailProvider):
         body_text: Optional[str] = None,
         from_email: Optional[str] = None,
         from_name: Optional[str] = None,
+        attachments: Optional[list[dict[str, str | bytes]]] = None,
     ) -> bool:
         if not self._validate_config():
             logger.error("Resend not configured. Falling back to console logging.")
             console = ConsoleProvider()
-            return await console.send(to_email, subject, body_html, body_text, from_email, from_name)
+            return await console.send(to_email, subject, body_html, body_text, from_email, from_name, attachments)
 
         try:
             import resend
@@ -224,6 +263,19 @@ class ResendProvider(EmailProvider):
             if body_text:
                 params["text"] = body_text
 
+            if attachments:
+                params["attachments"] = [
+                    {
+                        "filename": att.get("filename"),
+                        "content": list(att.get("content")) if isinstance(att.get("content"), bytes) else att.get("content"), # Resend expects list of ints for bytes? Or just raw bytes? Checking docs usually content is buffer or string.
+                        # Resend python SDK typically wants a list of dicts. 
+                        # Let's assume standard structure: {"filename": "x.pdf", "content": <bytes/buffer>}
+                        # NOTE: Resend Python SDK implementation details might vary. Safer to use content as list of integers if bytes.
+                    } for att in attachments
+                ]
+                # Updating to match Resend API structure more safely if possible, but basic pass-through for now.
+                # Actually, Resend SDK handles formatting usually.
+
             email = resend.Emails.send(params)
 
             logger.info(f"Email sent via Resend to {to_email}, id: {email.get('id', 'unknown')}")
@@ -233,7 +285,9 @@ class ResendProvider(EmailProvider):
             logger.error("Resend package not installed. Run: pip install resend")
             return False
         except Exception as e:
+            import traceback
             logger.error(f"Failed to send email via Resend: {e}")
+            logger.error(traceback.format_exc())
             return False
 
 

@@ -1,5 +1,6 @@
 """Schemas for account module."""
 
+from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 
@@ -28,3 +29,5 @@ class AccountResponse(BaseModel):
     phone_number: Optional[str] = None
     role: Optional[str] = None
     status: str
+    created_at: Optional[datetime] = None
+    last_login_at: Optional[datetime] = None

@@ -14,8 +14,8 @@ export interface AppConfig {
 
 const defaultConfig: AppConfig = {
   app: {
-    name: 'SAIL Starter Kit',
-    slug: 'sail-starter-kit',
+    name: 'EleVatria',
+    slug: 'elevatria',
     description: 'AI-Enabled App Generation Platform',
     type: 'saas-dashboard',
   },

@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   UserCog,
   Mail,
-  Lock,
   User,
   Phone,
   Briefcase,
@@ -24,12 +23,13 @@ import { updateUserSchema, type UpdateUserFormData } from '../../lib/schemas';
 import { getErrorMessage } from '../../lib/api-error';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
-import { Select } from '../../components/ui/Select';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import { PageLayout } from '../../components/layout/PageLayout';
 import type { UpdateUserRequest } from '../../types';
 
 const roleOptions = [
   { value: '', label: 'Viewer (Default)' },
+  { value: 'user', label: 'User' },
   { value: 'viewer', label: 'Viewer' },
   { value: 'editor', label: 'Editor' },
   { value: 'admin', label: 'Admin' },
@@ -62,6 +62,7 @@ export function EditUserPage() {
     setError,
     reset,
     watch,
+    control,
   } = useForm<UpdateUserFormData>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
@@ -140,7 +141,7 @@ export function EditUserPage() {
     return (
       <div className="p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <p className="text-gray-600">User not found</p>
+        <p className="text-gray-600 dark:text-gray-400">User not found</p>
       </div>
     );
   }
@@ -168,20 +169,20 @@ export function EditUserPage() {
     >
       {/* Error Alert */}
       {errors.root && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
-          <p className="text-red-700">{errors.root.message}</p>
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0" />
+          <p className="text-red-700 dark:text-red-300">{errors.root.message}</p>
           <button onClick={() => setError('root', {})} className="ml-auto">
-            <X className="w-4 h-4 text-red-600" />
+            <X className="w-4 h-4 text-red-600 dark:text-red-400" />
           </button>
         </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" autoComplete="off">
         {/* Account Details */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Mail className="w-5 h-5 text-gray-400" />
+        <div className="bg-white/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Mail className="w-5 h-5 text-gray-400 dark:text-gray-500" />
             Account Details
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -192,25 +193,23 @@ export function EditUserPage() {
               disabled
               helperText="Email cannot be changed"
             />
-            <div className="relative">
-              <Input
-                label="New Password"
-                type="password"
-                placeholder="Min 8 characters"
-                autoComplete="new-password"
-                helperText="Leave blank to keep current"
-                error={errors.password?.message}
-                {...register('password')}
-              />
-              <Lock className="absolute right-3 top-[38px] w-4 h-4 text-gray-400" />
-            </div>
+            <Input
+              label="New Password"
+              type="password"
+              placeholder="Min 8 characters"
+              showPasswordToggle
+              autoComplete="new-password"
+              helperText="Leave blank to keep current"
+              error={errors.password?.message}
+              {...register('password')}
+            />
           </div>
         </div>
 
         {/* Profile Details */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <User className="w-5 h-5 text-gray-400" />
+        <div className="bg-white/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <User className="w-5 h-5 text-gray-400 dark:text-gray-500" />
             Profile Details
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -252,26 +251,40 @@ export function EditUserPage() {
         </div>
 
         {/* Role & Status */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Shield className="w-5 h-5 text-gray-400" />
+        <div className="bg-white/80 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-gray-400 dark:text-gray-500" />
             Role & Status
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Select
-              label="Status"
-              options={statusOptions}
-              error={errors.status?.message}
-              {...register('status')}
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <CustomSelect
+                  label="Status"
+                  value={field.value}
+                  onChange={field.onChange}
+                  options={statusOptions}
+                  error={errors.status?.message}
+                />
+              )}
             />
             <div>
-              <Select
-                label="System Role"
-                options={roleOptions}
-                error={errors.role?.message}
-                {...register('role')}
+              <Controller
+                name="role"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    label="System Role"
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                    options={roleOptions}
+                    error={errors.role?.message}
+                  />
+                )}
               />
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 {getRoleHelperText()}
               </p>
             </div>
