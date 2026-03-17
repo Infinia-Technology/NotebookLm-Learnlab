@@ -1,0 +1,26 @@
+# Aider Configuration for SAIL Starter Kit
+# https://aider.chat/docs/config.html
+
+# Read-only files (aider won't modify these)
+read:
+  - system.config.json
+  - .cursorrules
+  - ai-guidelines.md
+  - CLAUDE.md
+  - README.md
+
+# Convention file for project rules
+convention: ai-guidelines.md
+
+# Auto-commit settings
+auto-commits: true
+dirty-commits: false
+
+# Git settings
+gitignore: true
+
+# Files to exclude from context
+# aider-ignore:
+#   - "*.log"
+#   - "node_modules/"
+#   - "__pycache__/"

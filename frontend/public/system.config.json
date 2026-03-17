@@ -1,0 +1,19 @@
+{
+  "app": {
+    "name": "EleVatria",
+    "slug": "elevatria",
+    "description": "Elevate Your Team. Accelerate Your Growth.",
+    "type": "saas-dashboard"
+  },
+  "theme": {
+    "primaryColor": "sky",
+    "secondaryColor": "slate"
+  },
+  "layout": {
+    "sidebarCollapsedByDefault": false
+  },
+  "branding": {
+    "logo": "/logo.svg",
+    "favicon": "/favicon.svg"
+  }
+}

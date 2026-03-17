@@ -1,0 +1,19 @@
+{
+  "app": {
+    "name": "EleVatria",
+    "slug": "elevatria",
+    "description": "AI-Enabled App Generation Platform - Build fullstack applications with templates",
+    "type": "saas-dashboard"
+  },
+  "theme": {
+    "primaryColor": "sky",
+    "secondaryColor": "slate"
+  },
+  "layout": {
+    "sidebarCollapsedByDefault": false
+  },
+  "branding": {
+    "logo": "/logo.svg",
+    "favicon": "/favicon.svg"
+  }
+}

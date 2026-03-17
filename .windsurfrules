@@ -1,0 +1,129 @@
+# SAIL Starter Kit - Windsurf Rules
+
+## Project Context
+
+Fullstack platform template with app generation capabilities.
+
+Stack:
+- Backend: FastAPI + Pydantic v2 + MongoDB (Motor async)
+- Frontend: React 19 + TypeScript + Vite + TailwindCSS v4
+- State: Zustand + React Query
+- Auth: JWT + bcrypt
+
+## First Time Setup (IMPORTANT)
+
+If this is a fresh clone or the user asks to "start the project":
+
+1. Ask the user for their app preferences:
+   - App name (required)
+   - Primary color (default: sky)
+   - App type (default: saas-dashboard)
+
+2. Run init with their values:
+```bash
+./init-project.sh --name "User's App Name" --color indigo --type saas-dashboard
+docker compose up --build
+```
+
+Options: --name, --slug, --color, --type, --desc, --defaults
+
+The init script will:
+1. Ask for app name, slug, primary color, description
+2. Generate system.config.json with your settings
+3. Create .env from template with secure defaults
+4. Update Docker service names
+
+**DO NOT** just copy .env.example and run docker compose - always use ./init-project.sh first.
+
+After init, access the app at:
+- Frontend: http://localhost:3100
+- API Docs: http://localhost:3100/api/docs
+
+## Strict Rules
+
+### Forbidden Actions
+- NO new frameworks or libraries without approval
+- NO modifications to docker-compose.yml without asking
+- NO bypassing authentication or RBAC checks
+- NO inline CSS - use Tailwind utilities only
+- NO raw HTML elements - use design system components
+- NO hardcoded colors - use CSS variables
+- NO manual file creation in modules/ or pages/generated/
+- NO using `npm run build` or `npm run dev` to test - use Docker
+
+### Building & Testing
+ALWAYS use Docker to build and run:
+```bash
+docker compose up --build      # Build and start
+docker compose up --build -d   # Background mode
+docker compose logs -f         # View logs
+```
+After code changes, rebuild with Docker to verify.
+
+### Required Patterns
+
+**Backend:**
+- All DB operations must be async/await
+- All functions must have type hints
+- All inputs validated with Pydantic
+- Use Depends() for dependency injection
+
+**Frontend:**
+- Use components from `components/ui/` only
+- Use `var(--color-name)` for all colors
+- Interfaces for all props
+- Functional components with hooks
+
+## Design System Components
+
+Location: `frontend/src/components/ui/`
+
+| Use This | Not This |
+|----------|----------|
+| `<Button>` | `<button>` |
+| `<Input>` | `<input>` |
+| `<Select>` | `<select>` |
+| `<Card>` | `<div className="border...">` |
+| `<Modal>` | Custom modal divs |
+
+## File Structure
+
+```
+backend/app/modules/<name>/
+├── __init__.py
+├── router.py      # FastAPI endpoints
+├── schemas.py     # Pydantic models
+└── service.py     # Business logic
+
+frontend/src/pages/<Name>.tsx
+frontend/src/components/ui/<Component>.tsx
+```
+
+## Configuration
+
+- App config: `system.config.json`
+- Design tokens: `frontend/src/design-system/design-tokens.css`
+- Environment: `.env` (copy from `.env.example`)
+
+## Commands
+
+```bash
+./generate-app.sh      # Generate new app module
+./verify-project.sh    # Verify project compliance
+docker compose up -d   # Start services
+```
+
+## Email Providers
+
+Set `EMAIL_PROVIDER` in .env:
+- `console` - Development (logs only)
+- `smtp` - SMTP server (Gmail, Outlook, etc.)
+- `resend` - Resend API
+
+## Protected Files
+
+Review before modifying:
+- `backend/app/core/*`
+- `backend/app/auth/*`
+- `frontend/src/components/ui/*`
+- `system.config.json`

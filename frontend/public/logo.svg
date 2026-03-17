@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <!-- SAIL Logo with text -->
+
+  <!-- Sail Icon -->
+  <g transform="translate(4, 4)">
+    <!-- Boat hull -->
+    <path d="M4 32 L36 32 L32 40 L8 40 Z" fill="#0284c7" opacity="0.9"/>
+    <!-- Main sail -->
+    <path d="M20 4 L20 30 L6 30 Z" fill="#0ea5e9"/>
+    <!-- Secondary sail -->
+    <path d="M22 8 L22 28 L34 28 Z" fill="#0284c7" opacity="0.6"/>
+    <!-- Mast -->
+    <rect x="19" y="2" width="2" height="32" fill="#0284c7" opacity="0.8"/>
+  </g>
+
+  <!-- SAIL Text -->
+  <text x="52" y="34" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="700" fill="#0f172a">
+    SAIL
+  </text>
+
+  <!-- Starter Kit Text -->
+  <text x="118" y="34" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="400" fill="#64748b">
+    Starter Kit
+  </text>
+</svg>

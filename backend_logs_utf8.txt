@@ -1,0 +1,23 @@
+﻿INFO:     172.18.0.5:51900 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     172.18.0.5:47226 - "GET /api/knowledge/documents HTTP/1.1" 200 OK
+DEBUG: Found 1 processed documents for user 24f47fb4-0980-4f12-a851-8017742b59fa
+DEBUG: Document dbms notes 17.02.2024.pdf has NO chunks stored!
+DEBUG: Final context_text length: 0
+INFO:     172.18.0.5:53394 - "POST /api/knowledge/chat HTTP/1.1" 200 OK
+DEBUG: Found 1 processed documents for user 24f47fb4-0980-4f12-a851-8017742b59fa
+DEBUG: Document dbms notes 17.02.2024.pdf has NO chunks stored!
+DEBUG: Final context_text length: 0
+INFO:     172.18.0.5:43518 - "POST /api/knowledge/chat HTTP/1.1" 200 OK
+DEBUG: Found 1 processed documents for user 24f47fb4-0980-4f12-a851-8017742b59fa
+DEBUG: Document dbms notes 17.02.2024.pdf has NO chunks stored!
+DEBUG: Final context_text length: 0
+INFO:     172.18.0.5:37082 - "POST /api/knowledge/chat HTTP/1.1" 200 OK
+INFO:     172.18.0.5:35902 - "DELETE /api/knowledge/documents/69994d659b8f918760ceb691 HTTP/1.1" 200 OK
+INFO:     172.18.0.5:35918 - "GET /api/knowledge/documents HTTP/1.1" 200 OK
+INFO:     172.18.0.5:49326 - "POST /api/knowledge/upload HTTP/1.1" 200 OK
+INFO:     172.18.0.5:49330 - "GET /api/knowledge/documents HTTP/1.1" 200 OK
+INFO:     172.18.0.5:32898 - "DELETE /api/knowledge/documents/6999e9aba82cf7281804f5db HTTP/1.1" 200 OK
+INFO:     172.18.0.5:32908 - "GET /api/knowledge/documents HTTP/1.1" 200 OK
+INFO:     172.18.0.5:34562 - "GET /api/knowledge/documents HTTP/1.1" 200 OK
+INFO:     172.18.0.5:40540 - "POST /api/knowledge/upload HTTP/1.1" 200 OK
+INFO:     172.18.0.5:40544 - "GET /api/knowledge/documents HTTP/1.1" 200 OK

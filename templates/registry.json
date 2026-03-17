@@ -1,0 +1,61 @@
+{
+  "version": "1.0.0",
+  "templates": {
+    "saas-dashboard": {
+      "name": "SaaS Dashboard",
+      "description": "Multi-tenant SaaS application with dashboard, analytics, and user management",
+      "icon": "LayoutDashboard",
+      "features": ["dashboard", "analytics", "multi-tenant", "user-management"],
+      "color": "blue"
+    },
+    "marketplace": {
+      "name": "Marketplace",
+      "description": "E-commerce marketplace with listings, search, and transaction management",
+      "icon": "Store",
+      "features": ["listings", "search", "transactions", "reviews"],
+      "color": "green"
+    },
+    "ocr-engine": {
+      "name": "OCR Engine",
+      "description": "Document processing with OCR, text extraction, and structured data output",
+      "icon": "ScanText",
+      "features": ["document-upload", "text-extraction", "data-parsing", "export"],
+      "color": "purple"
+    },
+    "analytics-platform": {
+      "name": "Analytics Platform",
+      "description": "Data analytics with charts, reports, and customizable dashboards",
+      "icon": "BarChart3",
+      "features": ["charts", "reports", "dashboards", "data-export"],
+      "color": "cyan"
+    },
+    "legal-ai": {
+      "name": "Legal AI",
+      "description": "Legal document analysis, contract review, and compliance checking",
+      "icon": "Scale",
+      "features": ["document-analysis", "contract-review", "compliance", "clauses"],
+      "color": "amber"
+    },
+    "fraud-detector": {
+      "name": "Fraud Detector",
+      "description": "Real-time fraud detection with risk scoring and alert management",
+      "icon": "ShieldAlert",
+      "features": ["risk-scoring", "alerts", "rules-engine", "audit-trail"],
+      "color": "red"
+    },
+    "automation-suite": {
+      "name": "Automation Suite",
+      "description": "Workflow automation with triggers, actions, and scheduling",
+      "icon": "Workflow",
+      "features": ["workflows", "triggers", "scheduling", "integrations"],
+      "color": "orange"
+    },
+    "ai-assistant": {
+      "name": "AI Assistant",
+      "description": "Conversational AI with chat interface, context management, and tool use",
+      "icon": "Bot",
+      "features": ["chat", "context", "tools", "history"],
+      "color": "violet"
+    }
+  }
+}

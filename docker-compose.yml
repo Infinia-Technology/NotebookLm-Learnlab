@@ -1,0 +1,91 @@
+# EleVatria Docker Compose
+#
+# Usage:
+#   docker compose up -d          # Start all services
+#   docker compose up --build     # Build and start
+#   docker compose logs -f        # View all logs
+#   docker compose down           # Stop
+#   docker compose down -v        # Stop + remove volumes
+#
+# Ports:
+#   3100  - Frontend (nginx)
+#   8000  - Backend API (internal)
+#   27017 - MongoDB
+
+services:
+  # ============================================
+  # DATABASE SERVICES
+  # ============================================
+
+  app-mongo:
+    image: mongo:7.0.14
+    container_name: app-mongo
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-app_admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-app_secure_pass}
+      MONGO_INITDB_DATABASE: ${MONGO_DB:-app_database}
+    volumes:
+      - app_mongo_data:/data/db
+    healthcheck:
+      test: [ "CMD", "mongosh", "-u", "${MONGO_USER:-app_admin}", "-p", "${MONGO_PASSWORD:-app_secure_pass}", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  app-redis:
+    image: redis:7.4-alpine
+    container_name: app-redis
+    volumes:
+      - app_redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ============================================
+  # APPLICATION SERVICES
+  # ============================================
+
+  app-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app-backend
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: redis://app-redis:6379
+    volumes:
+      - ./backend/app:/app/app
+    depends_on:
+      app-mongo:
+        condition: service_healthy
+      app-redis:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8001:8000"
+    restart: unless-stopped
+
+  app-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app-frontend
+    ports:
+      - "3100:80"
+    depends_on:
+      - app-backend
+    restart: unless-stopped
+
+# ============================================
+# VOLUMES
+# ============================================
+volumes:
+  app_mongo_data:
+  app_redis_data:

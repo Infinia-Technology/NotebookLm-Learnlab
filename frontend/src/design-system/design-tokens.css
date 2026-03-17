@@ -1,0 +1,259 @@
+/**
+ * Design Tokens - SAIL Starter Kit
+ *
+ * This file defines the core design tokens for the application.
+ * These values are used by Tailwind CSS and custom components.
+ *
+ * Primary Color: Sky Blue (#0284c7) - Modern, trustworthy, tech-forward
+ * Secondary Color: Slate - Professional, balanced, accessible
+ */
+
+@theme {
+   /* ============================================
+     APP PRIMARY COLOR - Sky Blue
+     ============================================
+     Main brand color conveying innovation and trust.
+  */
+   --color-app-primary-50: #f0f9ff;
+   --color-app-primary-100: #e0f2fe;
+   --color-app-primary-200: #bae6fd;
+   --color-app-primary-300: #7dd3fc;
+   --color-app-primary-400: #38bdf8;
+   --color-app-primary-500: #0ea5e9;
+   --color-app-primary-600: #0284c7;
+   --color-app-primary-700: #0369a1;
+   --color-app-primary-800: #075985;
+   --color-app-primary-900: #0c4a6e;
+   --color-app-primary-950: #082f49;
+
+   /* Main app primary color (used in components) */
+   --color-app-primary: #0284c7;
+   --color-app-primary-hover: #0369a1;
+   --color-app-primary-light: #e0f2fe;
+   --color-app-primary-dark: #075985;
+
+   /* ============================================
+     APP SECONDARY COLOR - Slate
+     ============================================
+     Neutral color for text, borders, backgrounds.
+  */
+   --color-app-secondary-50: #f8fafc;
+   --color-app-secondary-100: #f1f5f9;
+   --color-app-secondary-200: #e2e8f0;
+   --color-app-secondary-300: #cbd5e1;
+   --color-app-secondary-400: #94a3b8;
+   --color-app-secondary-500: #64748b;
+   --color-app-secondary-600: #475569;
+   --color-app-secondary-700: #334155;
+   --color-app-secondary-800: #1e293b;
+   --color-app-secondary-900: #0f172a;
+   --color-app-secondary-950: #020617;
+
+   /* Main app secondary color */
+   --color-app-secondary: #475569;
+   --color-app-secondary-hover: #334155;
+   --color-app-secondary-light: #f1f5f9;
+   --color-app-secondary-dark: #1e293b;
+
+   /* ============================================
+     SEMANTIC COLORS
+     ============================================
+     These remain consistent across all app themes.
+  */
+
+   /* Success */
+   --color-app-success: #10b981;
+   --color-app-success-light: #d1fae5;
+   --color-app-success-dark: #047857;
+
+   /* Warning */
+   --color-app-warning: #f59e0b;
+   --color-app-warning-light: #fef3c7;
+   --color-app-warning-dark: #b45309;
+
+   /* Danger/Error */
+   --color-app-danger: #ef4444;
+   --color-app-danger-light: #fee2e2;
+   --color-app-danger-dark: #b91c1c;
+
+   /* Info */
+   --color-app-info: #3b82f6;
+   --color-app-info-light: #dbeafe;
+   --color-app-info-dark: #1d4ed8;
+
+   /* ============================================
+     TYPOGRAPHY
+     ============================================
+  */
+   --font-app-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+   --font-app-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+
+   /* Font Sizes */
+   --text-app-xs: 0.75rem;
+   /* 12px */
+   --text-app-sm: 0.875rem;
+   /* 14px */
+   --text-app-base: 1rem;
+   /* 16px */
+   --text-app-lg: 1.125rem;
+   /* 18px */
+   --text-app-xl: 1.25rem;
+   /* 20px */
+   --text-app-2xl: 1.5rem;
+   /* 24px */
+   --text-app-3xl: 1.875rem;
+   /* 30px */
+   --text-app-4xl: 2.25rem;
+   /* 36px */
+
+   /* ============================================
+     SPACING
+     ============================================
+  */
+   --space-app-1: 0.25rem;
+   /* 4px */
+   --space-app-2: 0.5rem;
+   /* 8px */
+   --space-app-3: 0.75rem;
+   /* 12px */
+   --space-app-4: 1rem;
+   /* 16px */
+   --space-app-5: 1.25rem;
+   /* 20px */
+   --space-app-6: 1.5rem;
+   /* 24px */
+   --space-app-8: 2rem;
+   /* 32px */
+   --space-app-10: 2.5rem;
+   /* 40px */
+   --space-app-12: 3rem;
+   /* 48px */
+
+   /* ============================================
+     BORDER RADIUS
+     ============================================
+  */
+   --radius-app-sm: 0.25rem;
+   /* 4px */
+   --radius-app-md: 0.375rem;
+   /* 6px */
+   --radius-app-lg: 0.5rem;
+   /* 8px */
+   --radius-app-xl: 0.75rem;
+   /* 12px */
+   --radius-app-2xl: 1rem;
+   /* 16px */
+   --radius-app-full: 9999px;
+
+   /* ============================================
+     SHADOWS
+     ============================================
+  */
+   --shadow-app-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+   --shadow-app-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+   --shadow-app-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+   --shadow-app-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+   /* ============================================
+     TRANSITIONS
+     ============================================
+  */
+   --transition-app-fast: 150ms;
+   --transition-app-normal: 200ms;
+   --transition-app-slow: 300ms;
+
+   /* Semantic Colors (Mapped to Variables) */
+   --color-text-primary: var(--text-primary);
+   --color-text-secondary: var(--text-secondary);
+   --color-bg-card: var(--card-bg);
+   --color-border-card: var(--card-border);
+   --color-input-bg: var(--input-bg);
+   --color-input-border: var(--input-border);
+   --color-input-border-focus: var(--input-border-focus);
+   --color-input-ring-focus: var(--input-ring-focus);
+}
+
+/* ============================================
+   COMPONENT TOKENS (CSS Variables)
+   ============================================
+   These are runtime CSS variables that can be
+   used with var() in any CSS or Tailwind class.
+*/
+
+:root {
+   /* Button */
+   --btn-primary-bg: var(--color-app-primary);
+   --btn-primary-hover: var(--color-app-primary-hover);
+   --btn-primary-text: white;
+   --btn-border-radius: var(--radius-app-lg);
+
+   /* Secondary Button */
+   --btn-secondary-bg: var(--color-app-secondary);
+   --btn-secondary-hover: var(--color-app-secondary-hover);
+   --btn-secondary-text: white;
+
+   /* Input */
+   --input-border: var(--color-app-secondary-300);
+   --input-border-focus: var(--color-app-primary);
+   --input-ring-focus: var(--color-app-primary-300);
+   --input-border-radius: var(--radius-app-md);
+   --input-bg: white;
+
+   /* Card */
+   --card-bg: white;
+   --card-border: var(--color-app-secondary-100);
+   --card-border-radius: var(--radius-app-xl);
+   --card-shadow: var(--shadow-app-sm);
+
+   /* Sidebar */
+   --sidebar-bg: white;
+   --sidebar-text: var(--color-app-secondary-600);
+   --sidebar-text-active: var(--color-app-primary-600);
+   --sidebar-accent: var(--color-app-primary);
+   --sidebar-border: var(--color-app-secondary-100);
+
+   /* Header */
+   --header-bg: white;
+   --header-border: var(--color-app-secondary-100);
+
+   /* Content */
+   --content-bg: #f8fafc;
+   --text-primary: var(--color-app-secondary-900);
+   --text-secondary: var(--color-app-secondary-500);
+}
+
+
+.dark {
+   /* Button (dark mode) */
+   --btn-primary-bg: var(--color-app-primary-500);
+   --btn-primary-hover: var(--color-app-primary-400);
+
+   /* Secondary Button (dark mode) */
+   --btn-secondary-bg: var(--color-app-secondary-700);
+   --btn-secondary-hover: var(--color-app-secondary-600);
+
+   /* Input (dark mode) */
+   --input-border: var(--color-app-secondary-700);
+   --input-border-focus: var(--color-app-primary-500);
+   --input-ring-focus: var(--color-app-primary-900);
+   --input-bg: var(--color-app-secondary-900);
+
+   /* Card (dark mode) */
+   --card-bg: var(--color-app-secondary-900);
+   --card-border: var(--color-app-secondary-800);
+
+   /* Sidebar (dark mode) */
+   --sidebar-bg: #0a0a0a;
+   --sidebar-text: #a3a3a3;
+   --sidebar-text-active: white;
+   --sidebar-border: #1a1a1a;
+
+   /* Header (dark mode) */
+   --header-bg: #141414;
+   --header-border: #262626;
+
+   /* Content (dark mode) */
+   --content-bg: #0f0f0f;
+   --text-primary: #f5f5f5;
+   --text-secondary: #a3a3a3;
+}

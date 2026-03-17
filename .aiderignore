@@ -1,0 +1,40 @@
+# Aider Ignore File
+# Files and directories to exclude from Aider's context
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Docker volumes
+mongo_data/
+redis_data/
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Generated files (large)
+frontend/public/generated-apps.json
+
+# Lock files (usually not needed for context)
+package-lock.json
+poetry.lock
