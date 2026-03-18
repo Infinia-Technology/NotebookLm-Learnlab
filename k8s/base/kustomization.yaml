@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: learnlab
+
+resources:
+  # Namespace
+  - namespace.yaml
+
+  # Shared config & secret (one of each for everything)
+  - learnlab-configmap.yaml
+  - learnlab-secret.yaml
+
+  # Image pull secret
+  - ghcr-secret.yaml
+
+  # MongoDB
+  - mongo-statefulset.yaml
+  - mongo-service.yaml
+
+  # Redis
+  - redis-statefulset.yaml
+  - redis-service.yaml
+
+  # Backend
+  - backend-deployment.yaml
+  - backend-service.yaml
+
+  # Frontend
+  - frontend-deployment.yaml
+  - frontend-service.yaml
+  - nginx-configmap.yaml
