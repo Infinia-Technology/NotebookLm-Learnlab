@@ -109,4 +109,9 @@ jobs:
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
           git add k8s/overlays/dev/kustomization.yaml k8s/overlays/prod/kustomization.yaml
           git diff --staged --quiet || git commit -m "ci: update backend image tag to ${SHORT_SHA} [skip ci]"
-          git push
+          # Retry loop — handles race condition when frontend CI pushes at the same time
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            echo "Push attempt $i failed, retrying in 5s..."
+            sleep 5
+          done
