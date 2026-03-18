@@ -12,7 +12,7 @@ images:
   - name: ghcr.io/infinia-technology/learnlab-backend
     newTag: latest
   - name: ghcr.io/infinia-technology/learnlab-frontend
-    newTag: latest
+    newTag: 2ae82c2
 
 patches:
   # Prod: 3 replicas for backend
