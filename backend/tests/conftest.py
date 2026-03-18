@@ -16,6 +16,7 @@ os.environ.setdefault("SECRET_KEY", "ci-test-secret-key-not-for-production")
 os.environ.setdefault("JWT_ALGORITHM", "HS256")
 os.environ.setdefault("JWT_EXPIRE_DAYS", "7")
 os.environ.setdefault("APP_NAME", "EleVatria")
+os.environ.setdefault("JWT_SECRET", "ci-test-jwt-secret-not-for-production")
 os.environ.setdefault("APP_BASE_URL", "http://localhost:3100")
 os.environ.setdefault("DEBUG", "false")
 os.environ.setdefault(
