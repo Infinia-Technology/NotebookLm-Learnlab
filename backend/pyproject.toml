@@ -77,3 +77,5 @@ target-version = "py39"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+python_files = ["test_*.py", "*_test.py"]
+testpaths = ["tests", "test_email.py", "test_login.py"]

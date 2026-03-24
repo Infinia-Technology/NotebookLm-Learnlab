@@ -5,7 +5,7 @@ Uses Pydantic settings for type-safe configuration from environment variables.
 """
 
 from pydantic_settings import BaseSettings
-from pydantic import field_validator
+from pydantic import field_validator, ConfigDict
 from functools import lru_cache
 import json
 import sys
@@ -125,10 +125,11 @@ class Settings(BaseSettings):
             print("=" * 60 + "\n")
         return v
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        extra = "ignore"
+    model_config = ConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
 
 
 @lru_cache
