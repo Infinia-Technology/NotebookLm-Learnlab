@@ -4,40 +4,29 @@ kind: Kustomization
 namespace: learnlab
 
 resources:
-  - ../../base
+  # Namespace
+  - namespace.yaml
 
-# Image tags are updated here automatically by GitHub Actions CI
-# DO NOT edit these manually — the CI pipeline updates newTag on every merge to main
-images:
-  - name: ghcr.io/infinia-technology/learnlab-backend
-    newTag: latest
-  - name: ghcr.io/infinia-technology/learnlab-frontend
-    newTag: latest
+  # Shared config & secret (one of each for everything)
+  - learnlab-configmap.yaml
+  - learnlab-secret.yaml
 
-patches:
-  # Dev: 1 replica for backend
-  - patch: |-
-      - op: replace
-        path: /spec/replicas
-        value: 1
-    target:
-      kind: Deployment
-      name: backend
+  # Image pull secret
+  - ghcr-secret.yaml
 
-  # Dev: 1 replica for frontend
-  - patch: |-
-      - op: replace
-        path: /spec/replicas
-        value: 1
-    target:
-      kind: Deployment
-      name: frontend
+  # MongoDB
+  - mongo-statefulset.yaml
+  - mongo-service.yaml
 
-  # Dev: smaller MongoDB storage
-  - patch: |-
-      - op: replace
-        path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
-        value: 5Gi
-    target:
-      kind: StatefulSet
-      name: mongo
+  # Redis
+  - redis-statefulset.yaml
+  - redis-service.yaml
+
+  # Backend
+  - backend-deployment.yaml
+  - backend-service.yaml
+
+  # Frontend
+  - frontend-deployment.yaml
+  - frontend-service.yaml
+  - nginx-configmap.yaml
