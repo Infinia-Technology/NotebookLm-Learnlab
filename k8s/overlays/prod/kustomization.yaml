@@ -9,8 +9,12 @@ resources:
 # Image tags are updated here automatically by GitHub Actions CI
 # DO NOT edit these manually — the CI pipeline updates newTag on every merge to main
 images:
+nfinia-technology/learnlab-backend/{n;s|newTag:.*|newTag: ed9ce12|}
+nfinia-technology/learnlab-frontend/{n;s|newTag:.*|newTag: ed9ce12|}
   - name: ghcr.io/infinia-technology/learnlab-backend
     newTag: latest
+nfinia-technology/learnlab-backend/{n;s|newTag:.*|newTag: ed9ce12|}
+nfinia-technology/learnlab-frontend/{n;s|newTag:.*|newTag: ed9ce12|}
   - name: ghcr.io/infinia-technology/learnlab-frontend
     newTag: latest
 
