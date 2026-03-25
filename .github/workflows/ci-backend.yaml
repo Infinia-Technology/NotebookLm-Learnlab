@@ -1,0 +1,131 @@
+name: CI Backend
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - "backend/**"
+      - ".github/workflows/ci-backend.yaml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/ci-backend.yaml"
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: infinia-technology/learnlab-backend
+
+jobs:
+  # ────────────────────────────────────────────────────────────
+  # JOB 1: Run on dev push AND on PRs to main (validation gate)
+  # ────────────────────────────────────────────────────────────
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    # Inject all required env vars so pydantic-settings / config.py
+    # can initialise at import time without hitting sys.exit(1)
+    env:
+      MONGO_URI: "mongodb://test_admin:test_password@localhost:27017/test_db?authSource=admin"
+      REDIS_URL: "redis://localhost:6379"
+      SECRET_KEY: "ci-test-secret-key-not-used-in-production"
+      OPENAI_API_KEY: "sk-test-placeholder"
+      ANTHROPIC_API_KEY: "sk-ant-test-placeholder"
+      GEMINI_API_KEY: "test-placeholder"
+      ENVIRONMENT: "test"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"   # matches Dockerfile (python:3.11-slim)
+
+      - name: Install dependencies
+        run: |
+          pip install --no-cache-dir pip --upgrade
+          pip install --no-cache-dir hatchling
+          mkdir -p app && touch app/__init__.py
+          pip install --no-cache-dir -e ".[email]"
+
+      - name: Run tests
+        run: |
+          if [ -d "tests" ]; then
+            pytest -v
+          else
+            echo "No tests directory found — skipping"
+          fi
+
+  # ────────────────────────────────────────────────────────────
+  # JOB 2: Build + push image — ONLY on merge to main
+  # ────────────────────────────────────────────────────────────
+  build-and-push:
+    name: Build & Push
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: backend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      # ── Update image tags in both overlays ──────────────────
+      - name: Update image tag in k8s overlays
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+
+          # Dev overlay
+          sed -i "/name: ghcr.io\/infinia-technology\/learnlab-backend/{n;s|newTag:.*|newTag: ${SHORT_SHA}|}" \
+            k8s/overlays/dev/kustomization.yaml
+
+          # Prod overlay
+          sed -i "/name: ghcr.io\/infinia-technology\/learnlab-backend/{n;s|newTag:.*|newTag: ${SHORT_SHA}|}" \
+            k8s/overlays/prod/kustomization.yaml
+
+      - name: Commit updated manifests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
+          git add k8s/overlays/dev/kustomization.yaml k8s/overlays/prod/kustomization.yaml
+          git diff --staged --quiet || git commit -m "ci: update backend image tag to ${SHORT_SHA} [skip ci]"
+          # Retry loop — handles race condition when frontend CI pushes at the same time
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            echo "Push attempt $i failed, retrying in 5s..."
+            sleep 5
+          done
