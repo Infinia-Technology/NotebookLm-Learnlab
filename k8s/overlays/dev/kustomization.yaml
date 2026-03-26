@@ -15,20 +15,20 @@ images:
     newTag: ed9ce12 #latest
 
 patches:
-  # Dev: 1 replica for backend
+  # Dev: 2 replicas for backend
   - patch: |-
       - op: replace
         path: /spec/replicas
-        value: 1
+        value: 2
     target:
       kind: Deployment
       name: backend
 
-  # Dev: 1 replica for frontend
+  # Dev: 2 replicas for frontend
   - patch: |-
       - op: replace
         path: /spec/replicas
-        value: 1
+        value: 2
     target:
       kind: Deployment
       name: frontend
